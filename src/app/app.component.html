@@ -1,13 +1,13 @@
-<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark green scrolling-navbar ie-nav" [containerInside]="false">        
-  <mdb-navbar-brand>          
-        <a href=""><img style="height: 50px !important" src="assets/images/logo_white.png"></a>
-  </mdb-navbar-brand>
-  <links>
-      <ul class="navbar-nav mr-auto">
-         
-      </ul>
-      <ul class="navbar-nav nav-flex-icons">        
-      </ul>
-  </links>
-</mdb-navbar>
+<app-header></app-header>
+<div class="row columns">
+        <button (click)="login()" *ngIf="!(user | async)?.uid">Anonymous Login</button>
+        <button (click)="logout()" *ngIf="(user | async)?.uid">Logout</button>
+      
+        <input type="text" id="message" *ngIf="(user | async)?.uid" placeholder="What is it that you do?" (keyup.enter)="Send($event.target.value)" [(ngModel)]="msgVal" />
+        <div id="details-container">
+            <p *ngFor="let item of items | async"><img src="../assets/images/pin.svg">{{item.message}}</p>
+        </div>
+      </div>
+<router-outlet></router-outlet>
+<app-footer></app-footer>
 
