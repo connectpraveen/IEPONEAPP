@@ -1,30 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService} from '../data.service';
-import { Observable} from 'rxjs';
-import { AuthService } from '../providers/auth.service'
 import { AccountService } from '../providers/account.service';
 import { Account } from '../providers/account';
-import { LoginService } from '../providers/login/login.service'
+import { LoginService } from '../providers/login/login.service';
 import { Login } from '../providers/login/login';
 import { SharedDataService } from '../shared/shared-data.service';
+import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+//import { AuthService } from 'angular4-social-login';
+import { AuthService } from '../providers/auth.service'
 import { SocialUser } from 'angular4-social-login';
 import { GoogleLoginProvider } from 'angular4-social-login';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+//import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
+//import { AngularFire } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
+//import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
 import * as firebase from 'firebase';
+import { Observable } from 'rxjs';
 import { PhoneNumber } from '../providers/phone/phone-number';
 import { WindowService } from '../providers/phone/window.service';
 import { environment } from '../../environments/environment';
 import { AccountEmailFirebaseService } from '../providers/firebase/account-email-firebase.service';
 import { AccountPhoneFirebaseService } from '../providers/firebase/account-phone-firebase.service';
-import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  providers: [AccountService, DatePipe, LoginService, AngularFireDatabase, AngularFireAuth, WindowService,SharedDataService]
+  styleUrls: ['./login.component.css'],
+  providers: [SharedDataService,AccountService, DatePipe, LoginService, AngularFireDatabase, AngularFireAuth, WindowService]
 })
 export class LoginComponent implements OnInit {
 
@@ -37,14 +41,17 @@ export class LoginComponent implements OnInit {
   private currentUser: firebase.User;
   model: any = {}; currentAccount: Account;
   message: string;
-  errorMessage: string; 
+  errorMessage: string;
+ 
   authState: any = null; name: string;
   private userDetails: firebase.User = null; authenticated: boolean = false;
   phoneNumber = new PhoneNumber()
   private activeUser: Observable<firebase.User>;
-  ip:string;
-  constructor(private logSer: LoginService,private accser: AccountService,private router: Router,private datePipe: DatePipe, private shared: SharedDataService,
-    private authService: AuthService,
+
+ 
+
+  constructor(private accser: AccountService, private router: Router, private shared: SharedDataService,
+    private logSer: LoginService, private datePipe: DatePipe, private authService: AuthService,
     public afAuth: AngularFireAuth, private db: AngularFireDatabase, private win: WindowService,
     private accountEmailFirebaseService: AccountEmailFirebaseService,
     private accountPhoneFirebaseService: AccountPhoneFirebaseService) {
@@ -90,14 +97,16 @@ export class LoginComponent implements OnInit {
 
         this.windowRef.recaptchaWidgetId = widgetId
       });
-
-      this.logSer.getIpCliente().subscribe((ip: string) => {
-        this.ip = ip;
-      }, error => () => { }, () => { });
   }
   
   sendLoginCode() {
+    
+   
+    //prefix: string;
+    //line: string;
 
+    // format phone numbers as E.164
+    
     const appVerifier = this.windowRef.recaptchaVerifier;
     const num = this.phoneNumber.e164;
     firebase.auth().signInWithPhoneNumber(num, appVerifier)
@@ -118,7 +127,7 @@ export class LoginComponent implements OnInit {
        
         this.accountPhoneFirebaseService.getPhoneParentId(result.user.uid).then((parentId: string) => {
           this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
-          this.accser.saveAccount("",result.user.phoneNumber, result.user.uid,this.ip,result.user.providerData[0].providerId)
+          this.accser.saveAccountWithPhone(result.user.phoneNumber, result.user.uid)
             .subscribe((data: string) => {
               this.addLoginInfo(data)
               document.getElementById('change_phone_dialog').click();
@@ -139,14 +148,13 @@ export class LoginComponent implements OnInit {
         this.signIntoDB();
       })
       .catch((error) => {
-        error => this.errorMessage = "Some error occurred";
-        /*let result = this.linkAccount(error);
+        let result = this.linkAccount(error);
         if (result)
-          this.signIntoDB();*/
+          this.signIntoDB();
       });
   }
 
-  /*loginWithFacebook() {
+  loginWithFacebook() {
     this.authService.signInWithFacebook()
       .then((res) => {
         this.signIntoDB();
@@ -155,9 +163,9 @@ export class LoginComponent implements OnInit {
         if (result)
           this.signIntoDB();
       });
-  }*/
+  }
 
- /* loginWithTwitter() {
+  loginWithTwitter() {
     this.authService.signInWithTwitter()
       .then((res) => {
         this.accser.saveAccountWithName(this.afAuth.auth.currentUser.displayName, this.afAuth.auth.currentUser.uid)
@@ -173,7 +181,7 @@ export class LoginComponent implements OnInit {
               this.addLoginInfo(data)
             }, error => () => { }, () => { });
       });
-  }*/
+  }
 
   /*loginWithGithub() {
     this.authService.signInWithGithub()
@@ -197,10 +205,10 @@ export class LoginComponent implements OnInit {
     else{
     this.authService.createUser(this.user.email, this.user.password)
       .then((res) => {
-        //this.signIntoDB();
+        this.signIntoDB();
         this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
           this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-          this.accser.saveAccount(this.user.email,this.phoneNumber, res.user.uid,this.ip,res.user.providerData[0].providerId)
+          this.accser.saveAccountWithEmail(this.user.email, res.user.uid)
             .subscribe((data: string) => {
               this.addLoginInfo(data)
               document.getElementById('change_email_dialog').click();
@@ -214,7 +222,7 @@ export class LoginComponent implements OnInit {
 
               this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
                 this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-                this.accser.saveAccount(this.user.email,this.phoneNumber,res.user.uid,this.ip,res.user.providerData[0].providerId)
+                this.accser.saveAccountWithEmail(this.user.email, res.user.uid)
                   .subscribe((data: string) => {
                     this.addLoginInfo(data)
                     document.getElementById('change_email_dialog').click();
@@ -296,7 +304,7 @@ export class LoginComponent implements OnInit {
   }
   
   signIntoDB() {
-    this.accser.saveAccount(this.afAuth.auth.currentUser.email,this.phoneNumber, this.afAuth.auth.currentUser.uid,this.ip,this.afAuth.auth.currentUser.providerId)
+    this.accser.saveAccountWithEmail(this.afAuth.auth.currentUser.email, this.afAuth.auth.currentUser.uid)
       .subscribe((data: string) => {
         this.addLoginInfo(data)
       }, error => () => { }, () => { });
@@ -343,4 +351,12 @@ export class LoginComponent implements OnInit {
     }, error => () => { }, () => { });
   }
 }
+
+
+ 
+ 
+
+  
+  
+
 

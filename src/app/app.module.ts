@@ -70,8 +70,13 @@ export function provideConfig() {
     RouterModule.forRoot([
       {
         path:'login',
-        component:LoginComponent
+        component:LoginComponent        
+      },
+      {
+        path:'subscription',
+        component:SubscriptionComponent        
       }
+      
     ])
 
   ],

@@ -1,0 +1,81 @@
+.card {
+  margin: 0 auto; /* Added */
+  float: none; /* Added */  
+  width: 80%;
+}
+
+.card-body {
+  margin: 10 auto; /* Added */  
+}
+
+#emailLogin
+{
+color:#666666;
+}
+
+#phoneLogin {
+color: #666666;
+}
+#signUp {
+  color: blue;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom:5px;
+}
+
+#signUp:hover {
+  cursor:pointer;
+}
+
+#signupdiv {
+  margin-top: 0px;
+  margin-bottom: 10px;
+  }
+
+
+#googleDiv {
+margin-top: 20px;
+margin-bottom: 30px;
+}
+
+#gmailLogin {
+margin-top: 20px;
+padding: 12px 80px;
+border-radius: 8px;
+color: #ffffff;
+font-size: 18px;
+letter-spacing: 1.2px;
+margin-left: 5px;
+position: relative;
+background: #d84343;
+}
+
+#gmailLogin:hover {
+  margin-left:5px;
+  background: #e40030;
+  padding: 12px 80px;
+  border-radius: 8px;
+  color: #ffffff;
+}
+
+#signUp {
+color: blue;
+font-size: 16px;
+text-align: center;
+margin-bottom:5px;
+}
+
+#signUp:hover {
+cursor:pointer;
+}
+
+
+#hidden-email-form{
+margin-top:30px;
+display:none;
+}
+
+#hidden-phone-form {
+margin-top: 30px;
+display: none;
+}

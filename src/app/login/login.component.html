@@ -1,101 +1,84 @@
-<div class="wrap">
-    <div class="navbar top-header navbar-default">
-       <div class="container">
-         <div class="col-sm-12 text-left logo">
-            <a href="https://iepone.com/"><img src="../assets/images/logo_white.png" id="header-logo" /></a>
-         </div>
-       </div>
-     </div>
-  
-     <div class="col-sm-10 center iep" id="img">
-        <img src="../assets/images/iep.png" />
-     </div>
-     
-     <div class="container login-box">
-       <div class="row">
-         <div class="col-sm-offset-4 col-sm-4" id="loginBox">
- 
-           <!-- <h3 style="text-align:center;">Login With</h3>-->
-           <div class="col-sm-12" id="googleDiv">
-             <div (click)="loginWithGoogle()" id="googleLogin">
-               <button type="button" class="btn" id="gmailLogin">Login with Gmail</button>
-             </div>
-           </div>
- 
-           <div class="col-sm-12" id="googleDiv">
-             <div (click)="signUpWithGoogle()">
-               <p id="signUp"><u>Click Here if you dont have Google Account </u></p>
-             </div>
-           </div>
-           
-           <!--Email Login-->
-           <div class="col-sm-offset-3 col-sm-9" id="emailDiv">
-             <a id="emailLogin" href="#" class="" data-toggle="modal" (click)="showMail()"><u>Click Here to login with Email</u></a>
-           </div>
- 
-           <!--Phone Login-->
-           <div class="col-sm-offset-3 col-sm-9" id="phoneDiv">
-             <a id="phoneLogin" href="#" class="" data-toggle="modal" (click)="showPhone()"><u>Click Here to login with Phone</u></a>
-           </div>
- 
-           <form name="userform" method="post" #formCtrl="ngForm" id="hidden-email-form">
-             <div class="form-group">
-               <label for="exampleInputEmail1">Email address</label>
-               <input type="email" class="form-control" (click)="message = ''" [(ngModel)]="user.email" name="email" id="input" (click)="abcd()" placeholder="Email" required>
-             </div>
-             <div class="form-group">
-               <label for="exampleInputPassword1">Password</label>
-               <input type="password" class="form-control" (click)="message = ''" [(ngModel)]="user.password" id="password" name="password" placeholder="Password" required>
-             </div>
- 
-             <div class="form-group">
-               <button type="button" id="loginButton" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="signInWithEmail()" [disabled]="formCtrl.form.invalid">
-                 Login with Email
-               </button>
-             </div>
-             <label>{{message}}</label>
-           </form>
- 
-           <div id="hidden-phone-form">
-             <label for="phone">Phone Number</label>
-             <br>
-             <input type="text" style="max-width:50px;" [(ngModel)]="phoneNumber.country" class="input" placeholder="91" maxlength="2" id="phoneNumber1">
-             <input type="text" style="max-width:200px;" [(ngModel)]="phoneNumber.area" class="input" placeholder="94923456789" maxlength="10" id="phoneNumber2">
-             <div id="recaptcha-container"></div>
- 
-             <button (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
- 
-             <div *ngIf="windowRef.confirmationResult">
-               <hr>
-               <label for="code">Enter your Verification Code Here</label>
-               <br>
-               <input type="text" name="code" [(ngModel)]="verificationCode">
- 
-               <button (click)="verifyLoginCode()" id="verify">Verify</button>
-             </div>
- 
-             <div *ngIf="currentUser">
-               <!--You have successfully logged in!-->
-             </div>
-           </div>
-         </div>
-       </div>
- 
-       <!-- </section> -->
-       <div class="clearfix"></div>
-      </div>
- 
-      <div class="footer">
-        <div class="container">
-          <div class="col-md-6  text-left">
-            <p class="agileinfo"> &copy; Copyright IEP | ONE INC 2016</p>
-           </div>
- 
-           <div class="col-md-6 text-right">
-             <a href="#">contact@iepone.com</a>
-           </div>
-         </div>
-       </div>
-     </div>
-   
- 
+<mdb-card style="margin-top: 90px;">
+  <!--Card image-->
+  <!--Card content-->
+  <mdb-card-body style="text-align: center;">
+    <div (click)="loginWithGoogle()" id="googleLogin">
+      <a class="btn btn-primary waves-light" id="gmailLogin" mdbWavesEffect>Login with Gmail</a>
+    </div>
+    <div (click)="signUpWithGoogle()" id="signupdiv">
+      <p id="signUp"> <u> Click Here if you dont have Google Account</u></p>
+    </div>
+    <div id="emailDiv">
+      <a id="emailLogin" data-toggle="modal" (click)="showMail()">
+        <u>Click Here to login with Email</u>
+      </a>
+    </div>
+    <div id="phoneDiv">
+      <a id="phoneLogin" class="" data-toggle="modal" (click)="showPhone()">
+        <u>Click Here to login with Phone</u>
+      </a>
+    </div>
+
+    <!--Email Login-->
+
+
+    <!--Phone Login-->
+
+
+    <form name="userform" method="post" #formCtrl="ngForm" id="hidden-email-form">
+      <mdb-card>
+        <mdb-card-body style="text-align: left;"> 
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" (click)="message = ''" [(ngModel)]="user.email" name="email" id="input" (click)="abcd()"
+              placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" (click)="message = ''" [(ngModel)]="user.password" id="password" name="password"
+              placeholder="Password" required>
+          </div>
+
+          <div class="form-group">
+            <button type="button" id="loginButton" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="signInWithEmail()"
+              [disabled]="formCtrl.form.invalid">
+              Login with Email
+            </button>
+          </div>
+          <label>{{message}}</label>
+        </mdb-card-body>
+      </mdb-card>
+
+    </form>
+
+
+    <div id="hidden-phone-form">
+      <mdb-card>
+        <mdb-card-body style="text-align: left;">
+          <label for="phone">Phone Number</label>
+          <br>
+          <input type="text" style=" max-width: 50px; margin-right: 5px;" [(ngModel)]="phoneNumber.country" class="input" placeholder="91" maxlength="2"
+            id="phoneNumber1">
+          <input type="text" [(ngModel)]="phoneNumber.area" class="input" placeholder="94923456789" maxlength="10"
+            id="phoneNumber2">
+          <div id="recaptcha-container" style="margin-top: 10px; margin-bottom: 10px;"></div>
+
+          <button (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
+
+          <div *ngIf="windowRef.confirmationResult">
+            <hr>
+            <label for="code">Enter your Verification Code Here</label>            
+            <input type="text" name="code" [(ngModel)]="verificationCode">
+            <button (click)="verifyLoginCode()" id="verify" class="btn btn-primary btn-block" style="margin-bottom: 20px;">Verify</button>
+          </div>
+
+          <div *ngIf="currentUser">
+            <!--You have successfully logged in!-->
+          </div>
+        </mdb-card-body>
+      </mdb-card>
+
+    </div>
+
+  </mdb-card-body>
+</mdb-card>

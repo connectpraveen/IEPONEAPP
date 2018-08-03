@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpParams } from '@angular/common/http';
 import { Http, Response, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { map } from 'rxjs/operators';
-import { SharedDataService } from '../../shared/shared-data.service'
+import { SharedDataService } from '../../shared/shared-data.service';
 
 @Injectable()
 export class LoginService {
