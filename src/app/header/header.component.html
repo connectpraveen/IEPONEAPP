@@ -1,12 +1,17 @@
-<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark green scrolling-navbar ie-nav" [containerInside]="false">        
+<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark green scrolling-navbar ie-nav" [containerInside]="false" role="navigation">        
     <mdb-navbar-brand>          
           <a href=""><img style="height: 50px !important" src="assets/images/logo_white.png"></a>
     </mdb-navbar-brand>
     <links>
         <ul class="navbar-nav mr-auto">
-           
+        
         </ul>
-        <ul class="navbar-nav nav-flex-icons">        
+        <ul class="navbar-nav nav-flex-icons">  
+                <a [hidden]="!showSignout" routerLink="/Account"><img style="margin-top: 8px;"   src="../assets/images/user-account1.png" id="user-account" /></a>
+                <span [hidden]="!showSignout">
+                        <a class=" pull-right btn sign" (click)="onSignOut()">Sign Out</a>
+               </span>
+          
         </ul>
     </links>
   </mdb-navbar>

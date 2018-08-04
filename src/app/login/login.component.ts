@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
       (activeUser) => {
         if (activeUser) {
           this.currentUser = activeUser;
-          console.log(this.currentUser);
+         // console.log(this.currentUser);
         }
         else {
           this.currentUser = null;
@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
     firebase.auth().signInWithPhoneNumber(num, appVerifier)
       .then(result => {
         this.windowRef.confirmationResult = result;
-        console.log("Result is " + result);
+        //console.log("Result is " + result);
         
        
       })
@@ -345,7 +345,7 @@ export class LoginComponent implements OnInit {
     this.logSer.getIpCliente().subscribe((ip: string) => {
       this.logSer.addLoginDetails(account_id, ip, 'active', 'allowed', login)
         .subscribe((res1: Boolean) => {
-          this.router.navigate(['subscription']);
+          this.router.navigate(['Account']);
            
         }, error => () => { }, () => { });
     }, error => () => { }, () => { });

@@ -73,8 +73,16 @@ export function provideConfig() {
         component:LoginComponent        
       },
       {
-        path:'subscription',
+        path:'Subscription',
         component:SubscriptionComponent        
+      },
+      {
+        path:'Account',
+        component:AccountComponent        
+      },
+      {
+        path:'Profile',
+        component:ProfileComponent        
       }
       
     ])
