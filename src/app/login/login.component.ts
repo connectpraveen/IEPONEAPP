@@ -2,19 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../providers/account.service';
 import { Account } from '../providers/account';
 import { LoginService } from '../providers/login/login.service';
-import { Login } from '../providers/login/login';
 import { SharedDataService } from '../shared/shared-data.service';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-//import { AuthService } from 'angular4-social-login';
 import { AuthService } from '../providers/auth.service'
-import { SocialUser } from 'angular4-social-login';
-import { GoogleLoginProvider } from 'angular4-social-login';
-import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
-//import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
-//import { AngularFire } from 'angularfire2';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { PhoneNumber } from '../providers/phone/phone-number';
@@ -22,7 +15,6 @@ import { WindowService } from '../providers/phone/window.service';
 import { environment } from '../../environments/environment';
 import { AccountEmailFirebaseService } from '../providers/firebase/account-email-firebase.service';
 import { AccountPhoneFirebaseService } from '../providers/firebase/account-phone-firebase.service';
-
 
 @Component({
   selector: 'login',
@@ -46,9 +38,7 @@ export class LoginComponent implements OnInit {
   authState: any = null; name: string;
   private userDetails: firebase.User = null; authenticated: boolean = false;
   phoneNumber = new PhoneNumber()
-  private activeUser: Observable<firebase.User>;
-
- 
+  private activeUser: Observable<firebase.User>; 
 
   constructor(private accser: AccountService, private router: Router, private shared: SharedDataService,
     private logSer: LoginService, private datePipe: DatePipe, private authService: AuthService,
@@ -61,7 +51,6 @@ export class LoginComponent implements OnInit {
     });
     this.activeUser = afAuth.authState;
     this.activeUser.subscribe(
-
       (activeUser) => {
         if (activeUser) {
           this.currentUser = activeUser;
@@ -76,19 +65,11 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = null;
-
     this.windowRef = this.win.windowRef;
-
-    // if (firebase.apps.length > 0) {
-    //   console.log(firebase.apps[0].name);
-    // }
-
     try {
       firebase.initializeApp(environment.firebase)
     } catch (error) {
-
     }
-   
 
     this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
     this.windowRef.recaptchaVerifier
@@ -100,21 +81,11 @@ export class LoginComponent implements OnInit {
   }
   
   sendLoginCode() {
-    
-   
-    //prefix: string;
-    //line: string;
-
-    // format phone numbers as E.164
-    
     const appVerifier = this.windowRef.recaptchaVerifier;
     const num = this.phoneNumber.e164;
     firebase.auth().signInWithPhoneNumber(num, appVerifier)
       .then(result => {
         this.windowRef.confirmationResult = result;
-        //console.log("Result is " + result);
-        
-       
       })
       .catch(error => console.log(error));
   }
@@ -123,13 +94,12 @@ export class LoginComponent implements OnInit {
     this.windowRef.confirmationResult
       .confirm(this.verificationCode)
       .then(result => {
-        this.currentUser = result.user;
-       
+        this.currentUser = result.user;       
         this.accountPhoneFirebaseService.getPhoneParentId(result.user.uid).then((parentId: string) => {
           this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
-          this.accser.saveAccountWithPhone(result.user.phoneNumber, result.user.uid)
+          this.accser.saveAccountWithPhone(result.user.uid,'',result.user.phoneNumber,'',  result.user.providerData[0].providerId)
             .subscribe((data: string) => {
-              this.addLoginInfo(data)
+              this.addLoginInfo(data,result.user.phoneNumber)
               document.getElementById('change_phone_dialog').click();
               
             }, error => () => { }, () => { });
@@ -150,49 +120,10 @@ export class LoginComponent implements OnInit {
       .catch((error) => {
         let result = this.linkAccount(error);
         if (result)
-          this.signIntoDB();
+         this.signIntoDB();
       });
   }
 
-  loginWithFacebook() {
-    this.authService.signInWithFacebook()
-      .then((res) => {
-        this.signIntoDB();
-      }).catch((error) => {
-        let result = this.linkAccount(error);
-        if (result)
-          this.signIntoDB();
-      });
-  }
-
-  loginWithTwitter() {
-    this.authService.signInWithTwitter()
-      .then((res) => {
-        this.accser.saveAccountWithName(this.afAuth.auth.currentUser.displayName, this.afAuth.auth.currentUser.uid)
-          .subscribe((data: string) => {
-            this.addLoginInfo(data)
-          }, error => () => { }, () => { });
-      })
-      .catch((error) => {
-        let result = this.linkAccount(error);
-        if (result)
-          this.accser.saveAccountWithName(this.afAuth.auth.currentUser.displayName, this.afAuth.auth.currentUser.uid)
-            .subscribe((data: string) => {
-              this.addLoginInfo(data)
-            }, error => () => { }, () => { });
-      });
-  }
-
-  /*loginWithGithub() {
-    this.authService.signInWithGithub()
-      .then((res) => {
-        this.signIntoDB();
-      })
-      .catch((error) => {
-        let result = this.linkAccount(error);
-        if (result)
-          this.signIntoDB();
-      });*/
   signUpWithGoogle() {
     window.open("https://accounts.google.com/signup/v2/webcreateaccount?service=mail&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ltmpl=default&flowName=GlifWebSignIn&flowEntry=SignUp",
       "_blank", "toolbar=no,scrollbars=yes,resizable=no,top=10,left=200,width=1000,height=650")
@@ -208,9 +139,9 @@ export class LoginComponent implements OnInit {
         this.signIntoDB();
         this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
           this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-          this.accser.saveAccountWithEmail(this.user.email, res.user.uid)
+          this.accser.saveAccountWithEmail(res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
             .subscribe((data: string) => {
-              this.addLoginInfo(data)
+              this.addLoginInfo(data,this.user.email)
               document.getElementById('change_email_dialog').click();
             }, error => () => { }, () => { });});
       })
@@ -222,9 +153,9 @@ export class LoginComponent implements OnInit {
 
               this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
                 this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-                this.accser.saveAccountWithEmail(this.user.email, res.user.uid)
+                this.accser.saveAccountWithEmail( res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
                   .subscribe((data: string) => {
-                    this.addLoginInfo(data)
+                    this.addLoginInfo(data,this.user.email)
                     document.getElementById('change_email_dialog').click();
                   }, error => () => { }, () => { });
               });
@@ -303,11 +234,14 @@ export class LoginComponent implements OnInit {
     throw error;
   }
   
-  signIntoDB() {
-    this.accser.saveAccountWithEmail(this.afAuth.auth.currentUser.email, this.afAuth.auth.currentUser.uid)
+  signIntoDB() {    
+    this.logSer.getIpCliente().subscribe((ip: string) => {
+    this.accser.saveAccountWithEmail( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
       .subscribe((data: string) => {
-        this.addLoginInfo(data)
-      }, error => () => { }, () => { });
+        localStorage.setItem("account_id",data);      
+        this.addLoginInfo(data,this.afAuth.auth.currentUser.email)
+      }, error => () => { }, () => { })
+    });    
   }
 
 
@@ -337,13 +271,10 @@ export class LoginComponent implements OnInit {
     document.getElementById('hidden-email-form').style.display = 'none';
   }
 
-  addLoginInfo(account_id) {
-    /*get logged in date and time*/
-    let login = this.getLoginDetails();
-
+  addLoginInfo(account_id,login_id) {
     /* get the ip address */
     this.logSer.getIpCliente().subscribe((ip: string) => {
-      this.logSer.addLoginDetails(account_id, ip, 'active', 'allowed', login)
+      this.logSer.addLoginDetails(account_id, ip, 'active', login_id, 'firebase')
         .subscribe((res1: Boolean) => {
           this.router.navigate(['Account']);
            

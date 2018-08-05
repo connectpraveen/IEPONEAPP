@@ -51,16 +51,16 @@ export class AccountService {
 
   /*************AFTER FIREBASE*************** */
 
-  saveAccountWithEmail(email, uid) {
-    let acc = { 'email': email, 'uid': uid, 'action': 'save-email' };
-    return this._http.get<string>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe(map(data => {
+  saveAccountWithEmail(uid,email,phone_number,ip_address,service_provider) {
+    let acc = { 'email': email, 'uid': uid,'phone_number':phone_number,'ip_address':ip_address,'service_provider':service_provider,'action': 'add' };
+    return this._http.get<string>(this.servletUrl + 'Account?' + JSON.stringify(acc)).pipe(map(data => {
       return <string>data;
     }));
   }
 
-  saveAccountWithPhone(phone, uid) {
-    let acc = { 'uid': uid, 'phone': phone, 'action': 'save-phone' };
-    return this._http.get<string>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe(map(data => {
+  saveAccountWithPhone(uid,email,phone_number,ip_address,service_provider) {
+    let acc = { 'email': email, 'uid': uid,'phone_number':phone_number,'ip_address':ip_address,'service_provider':service_provider,'action': 'add' };
+    return this._http.get<string>(this.servletUrl + 'Account?' + JSON.stringify(acc)).pipe(map(data => {
       return <string>data;
     }));
   }
@@ -144,11 +144,6 @@ export class AccountService {
       })
     };
     let acc = { 'email': email };
-    /*return this._http.post<string>("http://localhost:8080/" + 'Account?' + JSON.stringify(acc))
-      .map(data => {
-        return <string>data;
-      });*/
-
       return this.http.post("https://iepone-qa-mailer-server.appspot.com/"+ 'Account?'+ JSON.stringify(acc),email)
    .pipe(map(data => {
       return ;

@@ -69,6 +69,10 @@ export function provideConfig() {
     MDBBootstrapModule.forRoot(),
     RouterModule.forRoot([
       {
+        path:'',
+        component:LoginComponent        
+      },
+      {
         path:'login',
         component:LoginComponent        
       },

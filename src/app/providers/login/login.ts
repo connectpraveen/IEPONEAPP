@@ -1,8 +1,7 @@
 export class Login{
-  login_id: string;
+  login_user: string;
   ip_address: string;
   session_val: string;
-  permission: string;
-  last_login: string;
+  updated_at: string;
   account_id: string;
 }
