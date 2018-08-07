@@ -31,14 +31,11 @@ export class LoginService {
   
   getIpCliente(): Observable<string> {
       return this.http.get('https://api.ipify.org/?format=jsonp&callback=JSONP_CALLBACK') // ...using post request '
-      .pipe(map((res: Response) => {console.log('res ', res);
-                              console.log('res.json() ', res.text());
-                              console.log('parseado  stringify ', JSON.stringify(res.text()));
+      .pipe(map((res: Response) => {
                               let ipVar = res.text();
                               let num = ipVar.indexOf(":");
                               let num2 = ipVar.indexOf("\"});");
-                              ipVar = ipVar.slice(num + 2, num2);
-                              console.log('ipVar -- ', ipVar);
+                              ipVar = ipVar.slice(num + 2, num2);                             
                               return ipVar}));
   
 }

@@ -106,7 +106,7 @@ export class AccountService {
   /* get the account details given email id*/
   getAccountfromUID(uid): Observable<string> {
     let acc = { 'uid': uid, 'action': 'find' };
-    return this._http.get<string>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc))
+    return this._http.get<string>(this.servletUrl + 'Account?' + JSON.stringify(acc))
       .pipe(map(data => {
         return <string>data;
       }));

@@ -19,8 +19,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if(this.afAuth.auth.currentUser || (this.sharedService.getAuth().uid!==''))
     this.showSignout = true;
-    else this.showSignout = false;
-    console.log(this.showSignout);
+    else this.showSignout = false;    
   }
 
   onSignOut(){

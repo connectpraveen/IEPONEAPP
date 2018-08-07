@@ -31,6 +31,7 @@ import { environment } from '../environments/environment';
 import { LoginService } from './providers/login/login.service';
 import { FormsModule }   from '@angular/forms';
 
+
 let config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,

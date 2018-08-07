@@ -28,8 +28,7 @@ export class SubscriptionComponent implements OnInit {
   ngOnInit() {    
     if (this.afAuth.auth.currentUser) {    
       if (this.afAuth.auth.currentUser.displayName)      
-      this.showSignout= true;
-     console.log(this.afAuth.auth.currentUser) ;
+      this.showSignout= true;     
     }
   }
 

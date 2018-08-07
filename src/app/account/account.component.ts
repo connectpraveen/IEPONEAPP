@@ -82,25 +82,15 @@ export class AccountComponent implements OnInit {
     this.auth = this.shared.getAuth();
     if (this.afAuth.auth.currentUser === null) {
       if (this.auth.provider === 'phone') {
-        this.phone = this.auth.value;
-        // document.getElementById('tr-hide').style.display = 'none';
-        // document.getElementById('verifyButton').style.display = 'none';
-        // document.getElementById('phoneTR').style.display = 'block';
-        // document.getElementById('hide-email').style.display = 'block';
-        // document.getElementById('email-label').style.display = 'none';
+        this.phone = this.auth.value;   
       }
-
       if (this.auth.provider === 'password')
         this.eMail = this.auth.value;
       this.uid = this.auth.uid;
     }
-    if (this.afAuth.auth.currentUser) {
-      // document.getElementById('phone-label').style.display = 'none';
-      // document.getElementById('phone-label-hide').style.display = 'inline';
-      // document.getElementById('email-label').style.display = 'block';
+    if (this.afAuth.auth.currentUser) {    
       if (this.afAuth.auth.currentUser.email) {
-        this.eMail = this.afAuth.auth.currentUser.email;
-        // document.getElementById('profile-completion').style.display = 'none';
+        this.eMail = this.afAuth.auth.currentUser.email;        
       }
       if (this.afAuth.auth.currentUser.displayName)
         this.currentUsername = this.afAuth.auth.currentUser.displayName;
@@ -114,18 +104,9 @@ export class AccountComponent implements OnInit {
         this.loginCount = data.length;
       }, error => () => { }, () => { });
 
-
     if (this.auth.parentId.length == 0) {
-      this.auth.parentId = this.uid;
-      /* document.getElementById('thEmail').style.display = 'none';
-       document.getElementById('thAction').style.display = 'none';
-       document.getElementById('associatedEmails').style.display = 'none';*/
-      // document.getElementById('thPhone').style.display = 'none';
-      // document.getElementById('thPhoneAction').style.display = 'none';
+      this.auth.parentId = this.uid;   
     }
-
-
-
     this.accountEmailFirebaseService.getEmailParentId(this.auth.parentId).then((parentId: string) => {
       var x = this.accountEmailFirebaseService.getEmails(parentId);
       x.snapshotChanges().subscribe(item => {
@@ -170,12 +151,8 @@ export class AccountComponent implements OnInit {
 
           if (data.childId != this.uid) {
             var z = this.associatedPhones.push(data);
-            var tableRow = (z + 1) - 1;
-            console.log("Table Row=" + tableRow);
-            if (tableRow > 0) {
-              // document.getElementById('associatedPhone').style.display = 'block';
-              // document.getElementById('thPhone').style.display = 'table-cell';
-              // document.getElementById('thPhoneAction').style.display = 'table-cell';
+            var tableRow = (z + 1) - 1;            
+            if (tableRow > 0) {         
             }
           }
         });
@@ -183,15 +160,11 @@ export class AccountComponent implements OnInit {
     });
 
     this.windowRef = this.win.windowRef;
-
     try {
       firebase.initializeApp(environment.firebase)
     } catch (error) {
 
     }
-
-
-
     this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
     this.windowRef.recaptchaVerifier
       .render()
@@ -199,11 +172,10 @@ export class AccountComponent implements OnInit {
 
         this.windowRef.recaptchaWidgetId = widgetId
       });
-
   }
   
   onSubscribe() {
-    this.router.navigate(['subscribe']);
+    this.router.navigate(['Subscribe']);
   }
 
   onVerifyEmail() {
@@ -390,11 +362,7 @@ export class AccountComponent implements OnInit {
     debugger;
     var pwd = this.randomPwdGenerator();
     //var pwd = 'abcdef';
-    console.log(pwd);
-    /*var password = (<HTMLInputElement>document.getElementById("input_addpassword")).value;
-    var passwordPattern = /^([a-zA-Z0-9_\.\-]{6,})+$/;
-    console.log(password);
-    console.log(passwordPattern.test(password));*/
+    console.log(pwd);    
     if (pattern.test(input)){// && passwordPattern.test(password)) {
       this.authService.createUserWithoutSignIn(this.userAssociateEmailModel.email, pwd, dbContext)
         .then((res) => {
@@ -405,10 +373,8 @@ export class AccountComponent implements OnInit {
             parentId: this.auth.parentId, // parent-Id of current login user
             email: this.userAssociateEmailModel.email
           });
-          document.getElementById('change_emailpwd_dialog').click();
-          (<HTMLInputElement>document.getElementById("input_addemailpwd")).value = '';
-          //(<HTMLInputElement>document.getElementById("input_addpassword")).value = '';
-
+          
+          (<HTMLInputElement>document.getElementById("input_addemailpwd")).value = '';      
           //send email to reset password
           this.afAuth.auth.sendPasswordResetEmail(this.userAssociateEmailModel.email).then(function () {
             this.message ="An email has been sent to reset your password";
@@ -416,10 +382,11 @@ export class AccountComponent implements OnInit {
             console.log(error)
           });
         }).catch((err) => {
-          this.message = "This Email is already in use";
+          this.message = "There was some problem registering this email, please try later";
         });
     }
     else {
+      document.getElementById('addMessage1').innerText="Email Invalid!";
       this.message = "Email Invalid!";
     }
     this.message = '';
@@ -508,7 +475,7 @@ export class AccountComponent implements OnInit {
     this.logSer.getIpCliente().subscribe((ip: string) => {
       this.logSer.addLoginDetails(account_id, ip, 'active', 'allowed', login)
         .subscribe((res1: Boolean) => {
-          this.router.navigate(['subscription']);
+          this.router.navigate(['Subscription']);
            
         }, error => () => { }, () => { });
     }, error => () => { }, () => { });
