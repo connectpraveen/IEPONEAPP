@@ -58,8 +58,8 @@ export class SubscribeService {
   }
   getProfiles1(id): Profile[] {
     var profiles: Profile[] = [];
-    profiles.push(new Profile("4376eSHY676", "Cuddles","3rd Aug","YES"));
-    profiles.push(new Profile("4376eSHY677", "Nibbles","5th Aug","NO"));
+    profiles.push(new Profile("4376eSHY676", "Cuddles","10","Male","3rd Aug","YES"));
+    profiles.push(new Profile("4376eSHY677", "Nibbles","12","Male","5th Aug","NO"));
     return profiles;
   }
 }

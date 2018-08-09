@@ -46,7 +46,9 @@ export class ProfileComponent implements OnInit {
     password: ''
   };
   account_id: string;
-  Profile_Image='assets/images/profile.png';
+  message:string;
+  Profile_Image = 'assets/images/profile.png';
+  profile:Profile;
   constructor(private accser: AccountService, private shared: SharedDataService,
     private logSer: LoginService, public afAuth: AngularFireAuth,
     private authService: AuthService, private profSer: ProfileService, private sharedService: SharedDataService, private subSer: SubscribeService,
@@ -63,16 +65,16 @@ export class ProfileComponent implements OnInit {
       if (this.afAuth.auth.currentUser.displayName)
         this.showSignout = true;
     }
-    this.auth = this.shared.getAuth();      
-    this.profSer.getProfiles(this.account_id )
+    this.auth = this.shared.getAuth();
+    this.profSer.getProfiles(this.account_id)
       .subscribe((res: Profile[]) => {
         this.profiles = res;
       }, error => () => { }, () => { });
 
   }
-  filterProfilesOfType(type){
+  filterProfilesOfType(type) {
     return this.profiles.filter(x => x.status == type);
-}
+  }
   onAgeSelect(e) {
     this.age = e.target.value;
   }
@@ -88,27 +90,15 @@ export class ProfileComponent implements OnInit {
     return date + time;
   }
 
-  giveProfileAccess() {
-    let id: string;
-    var checkboxes = document.querySelectorAll('input[name=profile]:checked'), p = [];
-    Array.prototype.forEach.call(checkboxes, function (el) {
-      p.push(el.value);
-    });
-
-    var checkboxes = document.querySelectorAll('input[name=associatedEmail]:checked'), e = [];
-    Array.prototype.forEach.call(checkboxes, function (el) {
-      e.push(el.value);
-    });
-
-    this.accSer.getAccountfromUID(e.toString())
-      .subscribe((data: string) => {
-        id = data;
-        this.profSer.associateProfile(id, p.toString())
-          .subscribe((res) => {
-            //this.profiles = res;      
-          }, error => () => { }, () => { });
-      },
-        error => () => { }, () => { });
+  SaveProfile() {
+    this.profSer.SaveProfile(this.account_id, "D00281313178")
+      .subscribe((res) => { 
+        this.message = "Profile Added Successfully";
+        this.profSer.getProfiles(this.account_id)
+        .subscribe((res: Profile[]) => {
+          this.profiles = res;
+        }, error => () => { }, () => { });
+      }, error => () => { }, () => { });
 
   }
 

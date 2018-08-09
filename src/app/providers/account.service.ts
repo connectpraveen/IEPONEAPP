@@ -136,6 +136,15 @@ export class AccountService {
       }));
   }
 
+  SaveAssociatedEmailWithPassword(id,email)
+  {
+    let profile = { 'account_id': id,'email': email,'type': 'email','action': 'add' };
+    return this._http.get(this.servletUrl + 'AccountHolders?' + JSON.stringify(profile))
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+  
   sendEmail(email){
     const httpOptions = {
       headers: new HttpHeaders({

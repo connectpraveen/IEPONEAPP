@@ -328,8 +328,6 @@ export class AccountComponent implements OnInit {
     var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     var password = (<HTMLInputElement>document.getElementById("input_addpassword")).value;
     var passwordPattern = /^([a-zA-Z0-9_\.\-]{6,})+$/;
-    console.log(password);
-    console.log(passwordPattern.test(password));
     if (pattern.test(input) && passwordPattern.test(password)) {
       this.authService.createUserWithoutSignIn(this.userAssociateEmailModel.email, this.userAssociateEmailModel.password, dbContext)
         .then((res) => {
@@ -339,6 +337,7 @@ export class AccountComponent implements OnInit {
             parentId: this.auth.parentId, // parent-Id of current login user
             email: this.userAssociateEmailModel.email
           });
+          this.accser.SaveAssociatedEmailWithPassword(this.account_id,this.userAssociateEmailModel.email);
           document.getElementById('addEmailModal').click();
           (<HTMLInputElement>document.getElementById("input_addemail")).value = '';
           (<HTMLInputElement>document.getElementById("input_addpassword")).value = '';

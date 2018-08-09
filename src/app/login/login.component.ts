@@ -99,8 +99,7 @@ export class LoginComponent implements OnInit {
           this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
           this.accser.saveAccountWithPhone(result.user.uid,'',result.user.phoneNumber,'',  result.user.providerData[0].providerId)
             .subscribe((data: string) => {
-              this.addLoginInfo(data,result.user.phoneNumber)
-              document.getElementById('change_phone_dialog').click();
+              this.addLoginInfo(data,result.user.phoneNumber)             
               
             }, error => () => { }, () => { });
         });
@@ -141,8 +140,7 @@ export class LoginComponent implements OnInit {
           this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
           this.accser.saveAccountWithEmail(res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
             .subscribe((data: string) => {
-              this.addLoginInfo(data,this.user.email)
-              document.getElementById('change_email_dialog').click();
+              this.addLoginInfo(data,this.user.email)              
             }, error => () => { }, () => { });});
       })
       .catch((err) => {
@@ -155,8 +153,7 @@ export class LoginComponent implements OnInit {
                 this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
                 this.accser.saveAccountWithEmail( res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
                   .subscribe((data: string) => {
-                    this.addLoginInfo(data,this.user.email)
-                    document.getElementById('change_email_dialog').click();
+                    this.addLoginInfo(data,this.user.email)                    
                   }, error => () => { }, () => { });
               });
 
@@ -258,8 +255,7 @@ export class LoginComponent implements OnInit {
       x.style.display = 'block';
     else
       x.style.display = 'none';
-    document.getElementById('hidden-phone-form').style.display = 'none';
-    document.getElementById('loginBox').style.paddingBottom = '40px';
+    document.getElementById('hidden-phone-form').style.display = 'none';    
   }
 
   showPhone() {

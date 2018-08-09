@@ -22,12 +22,13 @@ export class ProfileService {
       }));
   }
 
-  associateProfile(id,profileIds){
-    let profile = { 'account_id': id,'profile_ids': profileIds, 'action': 'associate-profiles' };
-    return this._http.get(this.servletUrl + 'GetProfile?' + JSON.stringify(profile))
+  SaveProfile(id,device_id){
+    let profile = { 'account_id': id,'device_id': device_id,'status': 'not subscribed','action': 'add' };
+    return this._http.get(this.servletUrl + 'Profile?' + JSON.stringify(profile))
       .pipe(map(data => {
         return data;
       }));
   }
+
 
 }
