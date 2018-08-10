@@ -136,6 +136,24 @@ export class AccountService {
       }));
   }
 
+  GrantAssociateEmail(flag,email)
+  {
+    let profile = { 'flag': flag,'email': email,'phone_number': '','action': 'access' };
+    return this._http.get(this.servletUrl + 'AccountHolders?' + JSON.stringify(profile))
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
+  GrantAssociatePhone(flag,phone)
+  {
+    let profile = { 'flag': flag,'email': '','phone_number': phone,'action': 'access' };
+    return this._http.get(this.servletUrl + 'AccountHolders?' + JSON.stringify(profile))
+      .pipe(map(data => {
+        return data;
+      }));
+  }
+
   SaveAssociatedEmailWithPassword(id,email)
   {
     let profile = { 'account_id': id,'email': email,'type': 'email','action': 'add' };

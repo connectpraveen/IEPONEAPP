@@ -301,6 +301,14 @@ export class AccountComponent implements OnInit {
 
   }
 
+  onGrantAssociateEmail(key: string, id: string) {
+    this.accountEmailFirebaseService.getByKey(key).then((response) => {
+      var record: UserAssociateEmail = response as UserAssociateEmail;
+      // grant record from associate table
+     this.accser.GrantAssociateEmail(true,record.email);
+    });
+  }
+
   loginWithGoogle() {
     var dbContext = this.GetDBContext();
     this.authService.signInWithGoogleAssociated()
@@ -434,7 +442,7 @@ export class AccountComponent implements OnInit {
   onDeleteAssociatePhone(key: string) {
     // if (confirm('Are you sure to delete this record ?') == true) {
     this.accountPhoneFirebaseService.removePhone(key).then((isDeleted) => {
-      if (isDeleted) {
+      if (isDeleted) {              
         console.log("DeletedPhone")
       }
     });

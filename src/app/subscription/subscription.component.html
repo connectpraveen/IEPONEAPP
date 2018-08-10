@@ -23,15 +23,111 @@
             </mdb-card-header>
             <mdb-card-body>
                 <mdb-card-text></mdb-card-text>
+                <mdb-card style="margin: 15px; max-width: 500px;">
+                    <mdb-card-body>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Subscription Code:
+                                <b>{{subscription.subscription_code}}</b>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Status:
+                                <b>Active</b>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                                <label for="exampleInputEmail1">Subscription Date:
+                                    <b>{{subscription.subscription_date}}</b>
+                                </label>
+                            </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Expiration Date:
+                                <b>{{subscription.subscription_enddate}}</b>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Last Payment:
+                                <b>31-July-2018</b>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <label for="exampleInputPassword1">Auto Payment</label>
+                            </div>
+                            <div class="btn-group">
+
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios1"checked="{{subscription.auto_payment}}">
+                                    <label class="custom-control-label" for="defaultUnchecked1">On</label>
+                                </div>
+
+                                <!-- Default checked -->
+                                <div style="margin-left: 10px;" class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="defaultChecked1" name="defaultExampleRadios1" checked="{{!subscription.auto_payment}}">
+                                    <label class="custom-control-label" for="defaultChecked1">Off</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <button (click)="SaveProfile()" type="button" id="loginButton" class="btn btn-primary btn-block" style="margin-top: 10px;">
+                                    Enroll Auto Payment
+                                </button>
+                            </div>
+
+                        </div>
+                    </mdb-card-body>
+                </mdb-card>
             </mdb-card-body>
         </mdb-card>
 
-        <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px;">
+        <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 75px;">
             <mdb-card-header class="primary-color white-text">
                 <h6>Add Subscription</h6>
             </mdb-card-header>
             <mdb-card-body>
-                <mdb-card-text></mdb-card-text>
+                <mdb-card style="margin: 15px; max-width: 500px;">
+                    <mdb-card-body>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Number of profile</label>
+                            <input type="number" style="max-width: 100px;" class="form-control" name="name" id="input" placeholder="1" required>
+                        </div>
+                        <div class="form-group">
+                            <div class="clearfix">
+                                <label for="exampleInputPassword1">Subscription Type</label>
+                            </div>
+                            <div class="btn-group">
+
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                                    <label class="custom-control-label" for="defaultUnchecked">Enterprize</label>
+                                </div>
+
+                                <!-- Default checked -->
+                                <div style="margin-left: 10px;" class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+                                    <label class="custom-control-label" for="defaultChecked">Standard</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <div class="clearfix">
+                                    <label for="exampleInputEmail1">Price</label>
+                                </div>
+                                <input disabled="true" type="number" style="max-width: 100px;" class="form-control" name="name" id="input" placeholder="$29.99"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button (click)="SaveProfile()" type="button" id="loginButton" class="btn btn-primary btn-block">
+                                Payment
+                            </button>
+                        </div>
+                        <label>{{message}}</label>
+                    </mdb-card-body>
+                </mdb-card>
             </mdb-card-body>
         </mdb-card>
     </div>

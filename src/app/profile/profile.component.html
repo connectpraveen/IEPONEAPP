@@ -25,7 +25,7 @@
           <mdb-card-body>
             <div class="form-group">
               <label for="exampleInputEmail1">Name</label>
-              <input type="text"  class="form-control" name="name" id="input" placeholder="Name" required>
+              <input type="text" class="form-control" name="name" id="input" placeholder="Name" required>
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Age</label>
@@ -36,12 +36,17 @@
                 <label for="exampleInputPassword1">Gender</label>
               </div>
               <div class="btn-group">
-                <label mdbBtn color="grey" class="waves-light" [(ngModel)]="radioModel" mdbRadio="left" mdbWavesEffect>
-                  Male
-                </label>
-                <label mdbBtn color="grey" class="bwaves-light" [(ngModel)]="radioModel" mdbRadio="Right" mdbWavesEffect>
-                  Female
-                </label>
+                <!-- Default unchecked -->
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                  <label class="custom-control-label" for="defaultUnchecked">Male</label>
+                </div>
+
+                <!-- Default checked -->
+                <div class="custom-control custom-radio" style="margin-left: 10px;">
+                  <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+                  <label class="custom-control-label" for="defaultChecked">Female</label>
+                </div>
               </div>
             </div>
             <div class="form-group">

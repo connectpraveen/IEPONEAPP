@@ -52,7 +52,7 @@
                 </button>
               </div>
               <!--Body-->
-              <div class="modal-body">              
+              <div class="modal-body">
                 <div>
                   <form name="userform" method="post" #formCtrl="ngForm">
                     <div class="form-group">
@@ -76,7 +76,7 @@
                 </div>
               </div>
 
-              <!--Footer-->            
+              <!--Footer-->
             </div>
             <!--/.Content-->
           </div>
@@ -86,47 +86,48 @@
           <u>Add Gmail</u>
         </button>
 
-        
-        <button mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
-        (click)="frameEmail.show()" id="addframeEmail">
-        <i class="fa fa-plus"></i>&nbsp;&nbsp;
-        <u>Add Email</u>
-      </button>
-      <div mdbModal #frameEmail="mdbModal" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-notify modal-info" role="document">
-          <!--Content-->
-          <div class="modal-content">
-            <!--Header-->
-            <div class="modal-header">
-              <p class="heading lead">Add Email</p>
-              <button id="addframeEmailModal" type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frameEmail.hide()">
-                <span aria-hidden="true" class="white-text">&times;</span>
-              </button>
-            </div>
-            <!--Body-->
-            <div class="modal-body">              
-              <div>
-                <form name="userform" method="post" #formCtrl="ngForm">
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" [(ngModel)]="userAssociateEmailModel.email" (click)="message = ''" id="input_addemailpwd" name="email" placeholder="Email" required>
-                  </div>       
-                  <div class="form-group">
-                    <button type="button" id="btn_saveadd" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="onSaveAssociateEmailPwdAddress()">
-                      Save
-                    </button>
-                  </div>
-                  <label id="addMessage1">{{message}}</label>
-                </form>
-              </div>
-            </div>
 
-            <!--Footer-->            
+        <button mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
+          (click)="frameEmail.show()" id="addframeEmail">
+          <i class="fa fa-plus"></i>&nbsp;&nbsp;
+          <u>Add Email</u>
+        </button>
+        <div mdbModal #frameEmail="mdbModal" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content">
+              <!--Header-->
+              <div class="modal-header">
+                <p class="heading lead">Add Email</p>
+                <button id="addframeEmailModal" type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frameEmail.hide()">
+                  <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+              </div>
+              <!--Body-->
+              <div class="modal-body">
+                <div>
+                  <form name="userform" method="post" #formCtrl="ngForm">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Email address</label>
+                      <input type="email" class="form-control" [(ngModel)]="userAssociateEmailModel.email" (click)="message = ''" id="input_addemailpwd"
+                        name="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                      <button type="button" id="btn_saveadd" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="onSaveAssociateEmailPwdAddress()">
+                        Save
+                      </button>
+                    </div>
+                    <label id="addMessage1">{{message}}</label>
+                  </form>
+                </div>
+              </div>
+
+              <!--Footer-->
+            </div>
+            <!--/.Content-->
           </div>
-          <!--/.Content-->
         </div>
-      </div>
       </mdb-card-body>
     </mdb-card>
     <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px">
@@ -134,13 +135,16 @@
         <h6>Associated Email</h6>
       </mdb-card-header>
       <mdb-card-body>
-        <table class="table table-sm table-hover" id="associatedEmailsTable">
+        <table class="table table-sm table-hover" id="associatedEmailsTable" style="width: 70%;">
           <tr id="tableRow">
             <th id="thEmail">
               Email
             </th>
             <th id="thAction">
               Action
+            </th>
+            <th id="thAction">
+              Access Granted
             </th>
           </tr>
           <tr id="tr-hide">
@@ -150,6 +154,9 @@
             <td>
               <p>(primary)</p>
             </td>
+            <td>
+              <i class="fa fa-check-square-o"></i>
+            </td>
           </tr>
 
           <tr *ngFor="let oEmailAddress of this.associatedEmailAddresses">
@@ -157,6 +164,11 @@
             <td>
               <a title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
                 <i class="fa fa-trash-o"></i>
+              </a>
+            </td>
+            <td>
+              <a title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
+                <i class="fa fa-user-plus"></i>
               </a>
             </td>
           </tr>
@@ -176,7 +188,7 @@
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Phone Number</u>
         </button>
-        <div  mdbModal #framePhone="mdbModal" class="modal fade" id="frameModalPhone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        <div mdbModal #framePhone="mdbModal" class="modal fade" id="frameModalPhone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
           aria-hidden="true">
           <div class="modal-dialog modal-notify modal-info" role="document">
             <!--Content-->
@@ -199,7 +211,7 @@
                   maxlength="10">
                 <div id="recaptcha-container" style="margin-top: 10px;"></div>
 
-                <button  style="width: 80%;" (click)="sendLoginCode()" class="btn btn-primary btn-block">SMS Text Login Code</button>
+                <button style="width: 80%;" (click)="sendLoginCode()" class="btn btn-primary btn-block">SMS Text Login Code</button>
 
                 <div id="showVerificationCode" hidden="true">
                   <hr>
@@ -207,19 +219,19 @@
                   <br>
                   <input type="text" name="code" [(ngModel)]="verificationCode">
 
-                  <button mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect  (click)="verifyLoginCode()">Verify</button>
+                  <button mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect (click)="verifyLoginCode()">Verify</button>
                 </div>
               </form>
 
               <!--Footer-->
               <div class="modal-footer justify-content-center">
-              
+
               </div>
             </div>
             <!--/.Content-->
           </div>
         </div>
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover" style="width: 70%;">
 
           <tr>
             <th id="thPhone">
@@ -227,6 +239,9 @@
             </th>
             <th id="thPhoneAction">
               Action
+            </th>
+            <th>
+              Access Granted
             </th>
           </tr>
           <tr id="phoneTR" style="display:none">
@@ -236,6 +251,9 @@
             <td>
               <p>(primary)</p>
             </td>
+            <td>
+              <i class="fa fa-check-square-o"></i>
+            </td>
           </tr>
 
           <tr *ngFor="let oPhone of this.associatedPhones">
@@ -244,6 +262,11 @@
             <td>
               <a title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.$key)">
                 <i class="fa fa-trash-o"></i>
+              </a>
+            </td>
+            <td>
+              <a title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oEmailAddress.$key,oEmailAddress.childId)">
+                <i class="fa fa-user-plus"></i>
               </a>
             </td>
           </tr>
