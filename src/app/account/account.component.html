@@ -24,10 +24,11 @@
       </mdb-card-header>
       <mdb-card-body>
         <mdb-card-title>Email {{eMail}}</mdb-card-title>
-        <button mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect type="submit" id="verifyButton" data-toggle="modal"
+        <button [hidden]="emailVerified===true" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect type="submit" id="verifyButton" data-toggle="modal"
           data-target="#content" (click)="onVerifyEmail()">
-          <u>Verify</u>
+          <u >Verify</u>
         </button>
+        <u style="margin-left: 10px;" [hidden]="emailVerified===false">Verified</u>
         <mdb-card-text>
           <br>
           <label style="margin-top:10px;">{{verifyEMail}}</label>
@@ -162,12 +163,12 @@
           <tr *ngFor="let oEmailAddress of this.associatedEmailAddresses">
             <td>{{oEmailAddress.email}}</td>
             <td>
-              <a title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
+              <a [hidden]="emailVerified===false" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
                 <i class="fa fa-trash-o"></i>
               </a>
             </td>
             <td>
-              <a title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
+              <a [hidden]="emailVerified===false" title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
                 <i class="fa fa-user-plus"></i>
               </a>
             </td>
@@ -260,12 +261,12 @@
             <td>{{oPhone.phone}}</td>
 
             <td>
-              <a title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.$key)">
+              <a [hidden]="emailVerified===false" title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.$key)">
                 <i class="fa fa-trash-o"></i>
               </a>
             </td>
             <td>
-              <a title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oEmailAddress.$key,oEmailAddress.childId)">
+              <a [hidden]="emailVerified===false" title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oEmailAddress.$key,oEmailAddress.childId)">
                 <i class="fa fa-user-plus"></i>
               </a>
             </td>

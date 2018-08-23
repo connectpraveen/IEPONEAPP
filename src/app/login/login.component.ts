@@ -236,7 +236,9 @@ export class LoginComponent implements OnInit {
     this.accser.saveAccountWithEmail( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
       .subscribe((data: string) => {
         localStorage.setItem("account_id",data);      
-        this.addLoginInfo(data,this.afAuth.auth.currentUser.email)
+        this.addLoginInfo(data,this.afAuth.auth.currentUser.email);
+        localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
+        localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);    
       }, error => () => { }, () => { })
     });    
   }

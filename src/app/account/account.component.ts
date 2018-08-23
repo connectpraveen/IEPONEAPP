@@ -50,6 +50,7 @@ export class AccountComponent implements OnInit {
   savePhone: string;
   emailSaved = false;
   uid: string;
+  emailVerified=false;
   windowRef: any;
   emlMsg: string; socialLogin = false; userId: string;
   loginCount = 0; reverse = true; order = 'last_login'; 
@@ -75,6 +76,7 @@ export class AccountComponent implements OnInit {
   }
   ngOnInit() {       
     this.account_id=localStorage.getItem("account_id"); 
+    console.log(this.afAuth.auth.currentUser);
     if (this.afAuth.auth.currentUser) {    
       if (this.afAuth.auth.currentUser.displayName)      
       this.showSignout= true;  
@@ -90,10 +92,13 @@ export class AccountComponent implements OnInit {
     }
     if (this.afAuth.auth.currentUser) {    
       if (this.afAuth.auth.currentUser.email) {
-        this.eMail = this.afAuth.auth.currentUser.email;        
+        this.eMail = localStorage.getItem('email');    
+        this.emailVerified=  this.afAuth.auth.currentUser.emailVerified;  
+        this.afAuth.auth.currentUser.reload();
+        console.log("Email Verified:"+this.afAuth.auth.currentUser.emailVerified);
       }
       if (this.afAuth.auth.currentUser.displayName)
-        this.currentUsername = this.afAuth.auth.currentUser.displayName;
+        this.currentUsername = localStorage.getItem('display_name');;
       this.uid = this.afAuth.auth.currentUser.uid;
     }
 
@@ -482,7 +487,7 @@ export class AccountComponent implements OnInit {
     this.logSer.getIpCliente().subscribe((ip: string) => {
       this.logSer.addLoginDetails(account_id, ip, 'active', 'allowed', login)
         .subscribe((res1: Boolean) => {
-          this.router.navigate(['Subscription']);
+          //this.router.navigate(['Subscription']);
            
         }, error => () => { }, () => { });
     }, error => () => { }, () => { });
