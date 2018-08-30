@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
@@ -9,12 +8,9 @@ import { LoginComponent } from './login/login.component';
 import { AccountComponent } from './account/account.component';
 import { SubscriptionComponent } from './subscription/subscription.component';
 import { ProfileComponent } from './profile/profile.component';
-
 import {HttpClientModule} from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-
 import { RouterModule } from '@angular/router';
-
 import { AngularFireModule } from 'angularfire2';
 // New imports to update based on AngularFire2 version 4
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -30,7 +26,8 @@ import { GoogleLoginProvider, FacebookLoginProvider } from "angular4-social-logi
 import { environment } from '../environments/environment';
 import { LoginService } from './providers/login/login.service';
 import { FormsModule }   from '@angular/forms';
-
+import { NgxBraintreeModule } from 'ngx-braintree';
+import { BraintreeComponent } from './braintree/braintree.component';
 
 let config = new AuthServiceConfig([
   {
@@ -55,7 +52,8 @@ export function provideConfig() {
     LoginComponent,
     AccountComponent,
     SubscriptionComponent,
-    ProfileComponent
+    ProfileComponent,
+    BraintreeComponent
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase, 'angular-auth-firebase'),
@@ -65,6 +63,7 @@ export function provideConfig() {
     AngularFirestoreModule,
     BrowserModule,
     HttpClientModule,
+    NgxBraintreeModule,
     HttpModule,
     FormsModule,
     MDBBootstrapModule.forRoot(),
@@ -88,6 +87,10 @@ export function provideConfig() {
       {
         path:'Profile',
         component:ProfileComponent        
+      },
+      {
+        path:'braintree',
+        component:BraintreeComponent        
       }
       
     ])

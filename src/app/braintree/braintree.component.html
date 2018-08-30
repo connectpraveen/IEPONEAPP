@@ -1,0 +1,9 @@
+<p>
+    <ngx-braintree 
+    [clientTokenURL]="'http://localhost:3000/client_token'" 
+    [createPurchaseURL]="'http://localhost:3000/checkout'" 
+    [chargeAmount]="55.55"
+    (paymentStatus)="onPaymentStatus($event)">
+  </ngx-braintree>
+  
+</p>
