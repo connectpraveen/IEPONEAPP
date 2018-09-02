@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BraintreeComponent implements OnInit {
 
+  paymentResponse:any;
   constructor() { }
 
   ngOnInit() {
   }
-
+  onPaymentStatus(response):void
+  {
+  this.paymentResponse=response;  
+  }
 }
