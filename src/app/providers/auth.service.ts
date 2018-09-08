@@ -76,7 +76,8 @@ export class AuthService {
 
 
   signIn(email, password) {
-    return firebase.auth().signInWithEmailAndPassword(email, password)
+    console.log(password);
+    return this._firebaseAuth.auth.signInWithEmailAndPassword(email, password)
   }
 
   signInPhone(credential) {

@@ -34,60 +34,11 @@
           <label style="margin-top:10px;">{{verifyEMail}}</label>
           <label style="text-transform: capitalize;" [hidden]="emailSaved === false">{{emlMsg}}</label>
           <br>
-        </mdb-card-text>
-        <button mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
-          (click)="frame.show()" id="addEmail">
-          <i class="fa fa-plus"></i>&nbsp;&nbsp;
-          <u>Add Email And Password</u>
-        </button>
-        <div mdbModal #frame="mdbModal" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-notify modal-info" role="document">
-            <!--Content-->
-            <div class="modal-content">
-              <!--Header-->
-              <div class="modal-header">
-                <p class="heading lead">Add Email And Password</p>
-                <button id="addEmailModal" type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
-                  <span aria-hidden="true" class="white-text">&times;</span>
-                </button>
-              </div>
-              <!--Body-->
-              <div class="modal-body">
-                <div>
-                  <form name="userform" method="post" #formCtrl="ngForm">
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control" [(ngModel)]="userAssociateEmailModel.email" (click)="message = ''" id="input_addemail"
-                        name="email" placeholder="Email" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" [(ngModel)]="userAssociateEmailModel.password" (click)="message = ''" name="password"
-                        id="input_addpassword" placeholder="Password (min 6 charecters)" required>
-                    </div>
-
-                    <div class="form-group">
-                      <button type="button" id="btn_saveadEmail" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="onSaveAssociateEmailAddress()">
-                        Save
-                      </button>
-                    </div>
-                    <label id="addMessage">{{message}}</label>
-                  </form>
-                </div>
-              </div>
-
-              <!--Footer-->
-            </div>
-            <!--/.Content-->
-          </div>
-        </div>
+        </mdb-card-text>          
         <button type="button" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect (click)="loginWithGoogle()" id="addGmail">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Gmail</u>
         </button>
-
-
         <button mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
           (click)="frameEmail.show()" id="addframeEmail">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
@@ -147,30 +98,23 @@
             <th id="thAction">
               Access Granted
             </th>
-          </tr>
-          <tr id="tr-hide">
-            <td>
-              <label for="inputEmail3">{{eMail}} </label>
-            </td>
-            <td>
-              <p>(primary)</p>
-            </td>
-            <td>
-              <i class="fa fa-check-square-o"></i>
-            </td>
-          </tr>
+          </tr> 
 
           <tr *ngFor="let oEmailAddress of this.associatedEmailAddresses">
-            <td>{{oEmailAddress.email}}</td>
+            <td>{{oEmailAddress.accountHolderId}}</td>
             <td>
-              <a [hidden]="emailVerified===false" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
+              <a [hidden]="emailVerified===false || oEmailAddress.associationType=='Primary'" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.id)">
                 <i class="fa fa-trash-o"></i>
               </a>
+              <label [hidden]="oEmailAddress.associationType!='Primary'" >Primary              
+              </label>
             </td>
-            <td>
-              <a [hidden]="emailVerified===false" title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.$key,oEmailAddress.childId)">
+            <td>             
+              <a [hidden]="emailVerified===false|| oEmailAddress.associationType=='Primary'" title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.id)">
                 <i class="fa fa-user-plus"></i>
               </a>
+              <label [hidden]="oEmailAddress.associationType!='Primary'" >Yes              
+                </label>
             </td>
           </tr>
         </table>
@@ -244,29 +188,17 @@
             <th>
               Access Granted
             </th>
-          </tr>
-          <tr id="phoneTR" style="display:none">
-            <td>
-              <label for="inputEmail3 control-label sml">{{phone}} </label>
-            </td>
-            <td>
-              <p>(primary)</p>
-            </td>
-            <td>
-              <i class="fa fa-check-square-o"></i>
-            </td>
-          </tr>
-
+          </tr>       
           <tr *ngFor="let oPhone of this.associatedPhones">
-            <td>{{oPhone.phone}}</td>
+            <td>{{oPhone.accountHolderId}}</td>
 
             <td>
-              <a [hidden]="emailVerified===false" title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.$key)">
+              <a [hidden]="emailVerified===false" title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.id)">
                 <i class="fa fa-trash-o"></i>
               </a>
             </td>
             <td>
-              <a [hidden]="emailVerified===false" title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oEmailAddress.$key,oEmailAddress.childId)">
+              <a [hidden]="emailVerified===false" title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oPhone.id)">
                 <i class="fa fa-user-plus"></i>
               </a>
             </td>
@@ -302,17 +234,15 @@
                         <thead>
                           <tr>
                             <th style="text-align: center;">IP Address</th>
-                            <th style="text-align: center;">Session</th>
-                            <th style="text-align: center;">Permission</th>
+                            <th style="text-align: center;">Login through</th>                            
                             <th style="text-align: center;">Last Login</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let row of loginDetails">
-                            <td style="text-align: center;">{{row.ip_address}}</td>
-                            <td style="text-align: center;">{{row.session_val}}</td>
-                            <td style="text-align: center;">{{row.session_val}}</td>
-                            <td style="text-align: center;">{{row.updated_date}}</td>
+                            <td style="text-align: center;">{{row.ipAddress}}</td>
+                            <td style="text-align: center;">{{row.loginServiceProvider}}</td>                            
+                            <td style="text-align: center;">{{row.createdDate}}</td>
                           </tr>
                         </tbody>
                       </table>

@@ -5,6 +5,7 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpP
 import { Http, Response, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { map } from 'rxjs/operators';
 import { SharedDataService } from '../../shared/shared-data.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class LoginService {
@@ -23,12 +24,42 @@ export class LoginService {
   }
     
   /* fetch user login details */
-   getLoginDetails(id): Observable<Login[]> {
-      let login = {'account_id': id, 'action': 'fetch'};
-     return this._http.get<Login[]>(this.servletUrl + 'Login?' + JSON.stringify(login)).pipe(map(data => {
+   getLoginDetails(id): Observable<Login[]> {      
+     return this._http.get<Login[]>(this.servletUrl + 'loginHistory/' + id).pipe(map(data => {
              return <Login[]>data; }));
   }
-  
+  getAccountHolders(id): Observable<any[]> {      
+    return this._http.get<any[]>(this.servletUrl + 'accountHolders/' + id).pipe(map(data => {
+            return <any[]>data; }));
+ }
+deleteAccountHolders(id) {      
+  return this._http.delete(this.servletUrl + 'accountHolders/' + id).pipe(map(data => {
+          return data; }));
+}
+
+addAccountHolders(account_id,accountHolderId) { 
+  let acc_object={
+    "accountId": account_id,
+    "identityProvider": "Firebase",
+    "accountHolderId": accountHolderId,
+    "verification": "Not Verified",
+    "correspondence": "",
+    "profileAccess": "0",
+    "associationType": "Secondary",
+    "message": "",
+    "userUpdated": "admin"
+}
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json'        
+  })
+};
+  return this._http.post(this.servletUrl + 'accountHolder', acc_object, httpOptions).pipe(map(data => {    
+    return data;
+
+  }));
+}
+
   getIpCliente(): Observable<string> {
       return this.http.get('https://api.ipify.org/?format=jsonp&callback=JSONP_CALLBACK') // ...using post request '
       .pipe(map((res: Response) => {

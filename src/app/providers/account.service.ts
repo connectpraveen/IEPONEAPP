@@ -57,14 +57,70 @@ export class AccountService {
       return <string>data;
     }));
   }
+  saveAccountDataEmailServlet(uid,email,phone_number,ip_address,service_provider) {
+    let acc_object={
+      "account":{
+                "accountId": uid,
+                "accountType": "Personal",
+                "status": "Active",
+                "userUpdated": "admin"
+      
+    },
+    "loginData":{
+      "firebaseUid":uid,
+      "ipAddress":ip_address,
+      "loginUser":email,
+      "sessionUserObject":"",
+      "loginServiceProvider":service_provider
+      
+    }
+    }    
+    console.log(acc_object);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'        
+      })
+    };
+    return this._http.post(this.servletUrl + 'login', acc_object, httpOptions).pipe(map(data => {    
+      return data;
 
+    }));
+
+    
+  }
   saveAccountWithPhone(uid,email,phone_number,ip_address,service_provider) {
     let acc = { 'email': email, 'uid': uid,'phone_number':phone_number,'ip_address':ip_address,'service_provider':service_provider,'action': 'add' };
     return this._http.get<string>(this.servletUrl + 'Account?' + JSON.stringify(acc)).pipe(map(data => {
       return <string>data;
     }));
   }
-
+  saveAccountDataPhoneServlet(uid,email,phone_number,ip_address,service_provider) {
+    let acc_object={
+      "account":{
+                "accountId": uid,
+                "accountType": "Personal",
+                "status": "Active",
+                "userUpdated": "admin"
+      
+    },
+    "loginData":{
+      "firebaseUid":uid,
+      "ipAddress":ip_address,
+      "loginUser":phone_number,
+      "sessionUserObject":"",
+      "loginServiceProvider":service_provider
+      
+    }
+    }    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'        
+      })
+    };
+    return this._http.post(this.servletUrl + 'login', acc_object, httpOptions).pipe(map(data => {
+      return data;
+    }));
+  }
   saveAccount(email,phone,uid,ip,provider){
     let acc = { 'uid': uid,'email': email, 'phone_number': phone, 'action': 'add','ip_address':ip,'service_provider':provider };
     return this._http.get<string>(this.localservletUrl + 'Account?' + JSON.stringify(acc)).pipe(map(data => {

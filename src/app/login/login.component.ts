@@ -97,10 +97,16 @@ export class LoginComponent implements OnInit {
         this.currentUser = result.user;       
         this.accountPhoneFirebaseService.getPhoneParentId(result.user.uid).then((parentId: string) => {
           this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
-          this.accser.saveAccountWithPhone(result.user.uid,'',result.user.phoneNumber,'',  result.user.providerData[0].providerId)
-            .subscribe((data: string) => {
-              this.addLoginInfo(data,result.user.phoneNumber)             
-              
+          this.accser.saveAccountDataPhoneServlet(result.user.uid,'',result.user.phoneNumber,'',  result.user.providerData[0].providerId)
+            .subscribe((data: any) => {      
+              localStorage.setItem("uid",result.user.uid);           
+              localStorage.setItem("account_id",data.id);             
+              localStorage.setItem("email", result.user.phoneNumber);    
+              localStorage.setItem("display_name", result.user.phoneNumber); 
+              console.log("UID"+ result.user.uid);
+              console.log("account_id"+data.id);
+              console.log("Phone"+result.user.phoneNumber);
+              //this.router.navigate(['Account']);                         
             }, error => () => { }, () => { });
         });
       })
@@ -129,18 +135,18 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithEmail() {
-    if(this.user.email.endsWith('@gmail.com')){
-      this.message = "Please login with google";
-    }
-    else{
+    // if(this.user.email.endsWith('@gmail.com')){
+    //   this.message = "Please login with google";
+    // }
+    // else{
     this.authService.createUser(this.user.email, this.user.password)
       .then((res) => {
         this.signIntoDB();
         this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
           this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-          this.accser.saveAccountWithEmail(res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
-            .subscribe((data: string) => {
-              this.addLoginInfo(data,this.user.email)              
+          this.accser.saveAccountDataEmailServlet(res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
+            .subscribe((data: any) => {
+              this.router.navigate(['Account']);          
             }, error => () => { }, () => { });});
       })
       .catch((err) => {
@@ -151,9 +157,9 @@ export class LoginComponent implements OnInit {
 
               this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
                 this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-                this.accser.saveAccountWithEmail( res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
-                  .subscribe((data: string) => {
-                    this.addLoginInfo(data,this.user.email)                    
+                this.accser.saveAccountDataEmailServlet( res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
+                  .subscribe((data: any) => {
+                    this.router.navigate(['Account']);              
                   }, error => () => { }, () => { });
               });
 
@@ -169,7 +175,7 @@ export class LoginComponent implements OnInit {
           this.message = "Email or Password Incorrect";
         }
       });
-    }
+    //}
   }
 
 
@@ -233,12 +239,12 @@ export class LoginComponent implements OnInit {
   
   signIntoDB() {    
     this.logSer.getIpCliente().subscribe((ip: string) => {
-    this.accser.saveAccountWithEmail( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
-      .subscribe((data: string) => {
-        localStorage.setItem("account_id",data);      
-        this.addLoginInfo(data,this.afAuth.auth.currentUser.email);
+    this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
+      .subscribe((data:any) => {
+        localStorage.setItem("account_id",data.id);             
         localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
-        localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);    
+        localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);       
+        this.router.navigate(['Account']);
       }, error => () => { }, () => { })
     });    
   }

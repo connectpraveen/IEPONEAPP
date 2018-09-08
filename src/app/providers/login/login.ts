@@ -1,7 +1,11 @@
-export class Login{
-  login_user: string;
-  ip_address: string;
-  session_val: string;
-  updated_at: string;
-  account_id: string;
+export class Login{ 
+  id: string;
+  createdDate: string;
+  updatedDate: string;
+  userUpdated: string;
+  firebaseUid: string;
+  ipAddress:string;
+  loginUser:string;
+  sessionUserObject:string;
+  loginServiceProvider:string;
 }
