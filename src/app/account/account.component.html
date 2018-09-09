@@ -20,21 +20,21 @@
     <br>
     <mdb-card style="margin-left: 15px; margin-right: 15px;">
       <mdb-card-header class="primary-color white-text">
-        <h6>Welcome {{currentUsername}} !</h6>
+        <h6>Welcome {{currentUsername}}!</h6>
       </mdb-card-header>
       <mdb-card-body>
         <mdb-card-title>Email {{eMail}}</mdb-card-title>
-        <button [hidden]="emailVerified===true" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect type="submit" id="verifyButton" data-toggle="modal"
-          data-target="#content" (click)="onVerifyEmail()">
-          <u >Verify</u>
-        </button>
-        <u style="margin-left: 10px;" [hidden]="emailVerified===false">Verified</u>
+        <div [hidden]="emailVerified">   <button mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect type="submit" id="verifyButton"
+          data-toggle="modal" data-target="#content" (click)="onVerifyEmail()">
+          <u>Verify</u>
+        </button></div>      
+        <u style="margin-left: 10px;" [hidden]="!emailVerified">Verified</u>
         <mdb-card-text>
           <br>
           <label style="margin-top:10px;">{{verifyEMail}}</label>
           <label style="text-transform: capitalize;" [hidden]="emailSaved === false">{{emlMsg}}</label>
           <br>
-        </mdb-card-text>          
+        </mdb-card-text>
         <button type="button" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect (click)="loginWithGoogle()" id="addGmail">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Gmail</u>
@@ -98,28 +98,38 @@
             <th id="thAction">
               Access Granted
             </th>
-          </tr> 
+          </tr>
 
           <tr *ngFor="let oEmailAddress of this.associatedEmailAddresses">
             <td>{{oEmailAddress.accountHolderId}}</td>
             <td>
-              <a [hidden]="emailVerified===false || oEmailAddress.associationType=='Primary'" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.id)">
-                <i class="fa fa-trash-o"></i>
-              </a>
-              <label [hidden]="oEmailAddress.associationType!='Primary'" >Primary              
-              </label>
+              <div [hidden]="!emailVerified">
+                <a [hidden]="oEmailAddress.associationType=='Primary'" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.id)">
+                  <i class="fa fa-trash-o"></i>
+                </a>
+                <label [hidden]="oEmailAddress.associationType!='Primary'">Primary
+                </label>
+              </div>
             </td>
-            <td>             
-              <a [hidden]="emailVerified===false|| oEmailAddress.associationType=='Primary'" title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.id)">
-                <i class="fa fa-user-plus"></i>
-              </a>
-              <label [hidden]="oEmailAddress.associationType!='Primary'" >Yes              
+            <td>
+                <div [hidden]="oEmailAddress.profileAccess!=0">
+              <div [hidden]="!emailVerified">
+                <a [hidden]="oEmailAddress.associationType=='Primary'" title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.id,oEmailAddress.accountHolderId,oEmailAddress.verification)">
+                  <i class="fa fa-user-plus"></i>
+                </a>                
+                <label [hidden]="oEmailAddress.associationType!='Primary'">Yes
+                </label>
+              </div>
+              </div>
+              <label [hidden]="oEmailAddress.profileAccess==0">Yes
                 </label>
             </td>
           </tr>
         </table>
+
         <div class="col-sm-offset-3 col-sm-8">
           <label id="labelMessage">{{deletedMessage}}</label>
+          <label id="labelMessage">{{grantSuccess}}</label>
         </div>
       </mdb-card-body>
     </mdb-card>
@@ -188,23 +198,38 @@
             <th>
               Access Granted
             </th>
-          </tr>       
+          </tr>
           <tr *ngFor="let oPhone of this.associatedPhones">
             <td>{{oPhone.accountHolderId}}</td>
 
             <td>
-              <a [hidden]="emailVerified===false" title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.id)">
-                <i class="fa fa-trash-o"></i>
-              </a>
+              <div [hidden]="!emailVerified">
+                <a [hidden]="oPhone.associationType=='Primary'" title="delete" class="btn" (click)="onDeleteAssociatePhone(oPhone.id)">
+                  <i class="fa fa-trash-o"></i>
+                </a>
+                <label [hidden]="oPhone.associationType!='Primary'">Primary
+                </label>
+              </div>
             </td>
             <td>
-              <a [hidden]="emailVerified===false" title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oPhone.id)">
-                <i class="fa fa-user-plus"></i>
-              </a>
+              <div [hidden]="oPhone.profileAccess!=0">
+              <div [hidden]="!emailVerified">
+                <a [hidden]="oPhone.associationType=='Primary'" title="Grant Access" class="btn" (click)="onGrantAssociatePhone(oPhone.id,oPhone.accountHolderId,oPhone.verification)">
+                  <i class="fa fa-user-plus"></i>
+                </a>
+                <label [hidden]="oPhone.associationType!='Primary'">Yes
+                </label>
+              </div>
+            </div>
+            <label [hidden]="oPhone.profileAccess==0">Yes
+              </label>
+            
             </td>
           </tr>
         </table>
-
+        <div class="col-sm-offset-3 col-sm-8">          
+          <label id="labelMessage">{{grantSuccessPhone}}</label>
+        </div>
       </mdb-card-body>
     </mdb-card>
     <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 70px;">
@@ -234,14 +259,14 @@
                         <thead>
                           <tr>
                             <th style="text-align: center;">IP Address</th>
-                            <th style="text-align: center;">Login through</th>                            
+                            <th style="text-align: center;">Login through</th>
                             <th style="text-align: center;">Last Login</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr *ngFor="let row of loginDetails">
                             <td style="text-align: center;">{{row.ipAddress}}</td>
-                            <td style="text-align: center;">{{row.loginServiceProvider}}</td>                            
+                            <td style="text-align: center;">{{row.loginServiceProvider}}</td>
                             <td style="text-align: center;">{{row.createdDate}}</td>
                           </tr>
                         </tbody>

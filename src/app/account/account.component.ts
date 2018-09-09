@@ -23,13 +23,15 @@ import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
-  providers:[AccountService,SharedDataService,LoginService,AuthService,WindowService,DatePipe]
+  providers: [AccountService, SharedDataService, LoginService, AuthService, WindowService, DatePipe]
 })
 export class AccountComponent implements OnInit {
-  showVerificationCode=false;
+  grantSuccess:string;
+  grantSuccessPhone:string;
+  showVerificationCode = false;
   private currentUser: firebase.User;
-  showSignout= false;
-  currentUsername: string; authState: any = null;  
+  showSignout = false;
+  currentUsername: string; authState: any = null;
   phoneNumber = new PhoneNumber();
   user: any;
   model: any = {};
@@ -50,10 +52,10 @@ export class AccountComponent implements OnInit {
   savePhone: string;
   emailSaved = false;
   uid: string;
-  emailVerified=false;
+  emailVerified = false;
   windowRef: any;
   emlMsg: string; socialLogin = false; userId: string;
-  loginCount = 0; reverse = true; order = 'last_login'; 
+  loginCount = 0; reverse = true; order = 'last_login';
   userAssociateEmailModel = {
     email: '',
     password: ''
@@ -61,11 +63,11 @@ export class AccountComponent implements OnInit {
   auth: any
   public associatedEmailAddresses: UserAssociateEmail[];
   public associatedPhones: UserAssociatePhone[];
-  account_id:string;  
-  constructor(private router: Router,private accser: AccountService, private shared: SharedDataService, 
-    private logSer: LoginService,  public afAuth: AngularFireAuth, 
+  account_id: string;
+  constructor(private router: Router, private accser: AccountService, private shared: SharedDataService,
+    private logSer: LoginService, public afAuth: AngularFireAuth,
     private authService: AuthService,
-    private win: WindowService,private datePipe: DatePipe,
+    private win: WindowService, private datePipe: DatePipe,
     private accountEmailFirebaseService: AccountEmailFirebaseService,
     private accountGmailFirebaseService: AccountGmailFirebaseService,
     private accountPhoneFirebaseService: AccountPhoneFirebaseService) {
@@ -74,42 +76,63 @@ export class AccountComponent implements OnInit {
       this.currentUser = this.afAuth.auth.currentUser
     });
   }
-  ngOnInit() {       
-    this.account_id=localStorage.getItem("account_id");  
-    this.uid=localStorage.getItem("uid");  
-    if (this.afAuth.auth.currentUser||this.uid) {    
-      if (this.afAuth.auth.currentUser.displayName||this.uid)      
-      this.showSignout= true;  
+  ngOnInit() {
+    this.account_id = localStorage.getItem("account_id");
+    this.uid = localStorage.getItem("uid");
+    if (this.uid) {
+      this.showSignout = true;
     }
     this.auth = this.shared.getAuth();
+    this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
+      this.emailVerified = false;
+      data.accountHolders.forEach(element => {        
+        if (String(element.accountHolderId).indexOf("@") > 0) {
+          console.log("Email Found");
+          if (String(element.associationType) == "Primary") {
+            console.log("Primary Found");
+            if (String(element.verification) == "Verified") {
+              console.log("Verified Found" + element.verification);
+              this.emailVerified = true;              
+            }
+          }
+        }
+
+        else {
+          this.emailVerified = true;
+          // if (String(element.associationType) == "Primary") {
+          //   if (String(element.verification) == "Verified") {
+          //     this.emailVerified = true;
+          //   }
+          // }
+        }
+      });
+      console.log("Email Verified"+this.emailVerified);
+    });
     
-    if (this.afAuth.auth.currentUser === null) {
-      if (this.auth.provider === 'phone') {
-        this.phone = this.auth.value;   
-      }
-      if (this.auth.provider === 'password')
-        this.eMail = this.auth.value;      
-    }
-    if (this.afAuth.auth.currentUser) {    
+    if (this.afAuth.auth.currentUser) {
       if (this.afAuth.auth.currentUser.email) {
-        this.eMail = localStorage.getItem('email');    
-        this.emailVerified=  this.afAuth.auth.currentUser.emailVerified;  
+        this.eMail = localStorage.getItem('email');
+        this.emailVerified = this.afAuth.auth.currentUser.emailVerified;
         this.afAuth.auth.currentUser.reload();
       }
       // if (this.afAuth.auth.currentUser.displayName)
-      this.currentUsername = localStorage.getItem('display_name');;
-      this.uid = this.uid;
-    }
+    
 
+    }
+    this.currentUsername = localStorage.getItem('display_name');
+    this.eMail = localStorage.getItem('display_name');
     /* fetch user login details */
     this.logSer.getLoginDetails(this.uid)
-      .subscribe((data: any) => {    
+  
+      .subscribe((data: any) => {
+        console.log(this.uid);
+        console.log(data);
         this.loginDetails = data.data;
         this.loginCount = data.data.length;
       }, error => () => { }, () => { });
 
     if (this.auth.parentId.length == 0) {
-      this.auth.parentId = this.uid;   
+      this.auth.parentId = this.uid;
     }
 
 
@@ -127,20 +150,19 @@ export class AccountComponent implements OnInit {
         this.windowRef.recaptchaWidgetId = widgetId
       });
 
-      this.GetAccountHolders();
+    this.GetAccountHolders();
   }
-  GetAccountHolders()
-  {
-    this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {         
+  GetAccountHolders() {
+    this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
       this.associatedEmailAddresses = [];
       this.associatedPhones = [];
-      data.accountHolders.forEach(element => {              
-          if( String(element.accountHolderId).indexOf("@")>0)           
-          this.associatedEmailAddresses.push(element);  
-          else
+      data.accountHolders.forEach(element => {
+        if (String(element.accountHolderId).indexOf("@") > 0)
+          this.associatedEmailAddresses.push(element);
+        else
           this.associatedPhones.push(element);
-      });          
-  });
+      });
+    });
   }
   onSubscribe() {
     this.router.navigate(['Subscribe']);
@@ -149,11 +171,9 @@ export class AccountComponent implements OnInit {
   onVerifyEmail() {
     this.currentUser = this.afAuth.auth.currentUser;
     this.verifyEMail = "Link hasbeen sent to your mail, please verify it";
-    this.currentUser.sendEmailVerification().then(function () {
-      // Email sent.
-    }).catch(function (error) {
-      console.log(error);
-    });
+    this.accser.sendemail(this.eMail)
+      .subscribe((data: any) => {       
+      }, error => () => { }, () => { });
   }
   onSave() {
     this.accser.updatePhone(this.model.phone, this.uid)
@@ -239,34 +259,45 @@ export class AccountComponent implements OnInit {
       .subscribe((data: number) => {
       }, error => () => { }, () => { });
   }
-  onShowPlatformLogin() {       
-   if(document.getElementById("loginhistory").hidden ==true) 
-   document.getElementById("loginhistory").hidden=false;
-   else
-   document.getElementById("loginhistory").hidden=true;
+  onShowPlatformLogin() {
+    if (document.getElementById("loginhistory").hidden == true)
+      document.getElementById("loginhistory").hidden = false;
+    else
+      document.getElementById("loginhistory").hidden = true;
   }
 
   onDeleteAssociateEmail(id: string) {
-    this.logSer.deleteAccountHolders(id).subscribe((data: any) => {   
-      this.GetAccountHolders();          
-  });
+    this.logSer.deleteAccountHolders(id).subscribe((data: any) => {
+      this.grantSuccess="";
+      this.grantSuccessPhone="";
+      this.GetAccountHolders();
+    });
 
   }
 
-  onGrantAssociateEmail(id: string) {
-  
+  onGrantAssociateEmail(id: string, accountHolderId:string, Verified:string) {
+    this.accser.updateAccountHolderGrant(id,this.account_id,"firebase",accountHolderId,Verified).subscribe((data: any) => {  
+      this.grantSuccess="Grant was successful!"
+      this.GetAccountHolders();
+    }, error => () => { }, () => { });
   }
 
+  onGrantAssociatePhone(id: string, accountHolderId:string, Verified:string) {
+    this.accser.updateAccountHolderGrant(id,this.account_id,"firebase",accountHolderId,Verified).subscribe((data: any) => {  
+      this.grantSuccessPhone="Grant was successful!"
+      this.GetAccountHolders();
+    }, error => () => { }, () => { });
+  }
   loginWithGoogle() {
     var dbContext = this.GetDBContext();
     this.authService.signInWithGoogleAssociated()
       .then((res) => {
         this.signIntoDB();
         this.accountGmailFirebaseService.add({
-            childId: res.user.uid,
-            //password: 'abcd',
-            parentId: this.auth.parentId, // parent-Id of current login user
-            email: res.user.email
+          childId: res.user.uid,
+          //password: 'abcd',
+          parentId: this.auth.parentId, // parent-Id of current login user
+          email: res.user.email
         });       // this.signIntoDB();
       })
       .catch((error) => {
@@ -293,17 +324,17 @@ export class AccountComponent implements OnInit {
             parentId: this.auth.parentId, // parent-Id of current login user
             email: this.userAssociateEmailModel.email
           });
-          this.accser.SaveAssociatedEmailWithPassword(this.account_id,this.userAssociateEmailModel.email);
+          this.accser.SaveAssociatedEmailWithPassword(this.account_id, this.userAssociateEmailModel.email);
           document.getElementById('addEmailModal').click();
           (<HTMLInputElement>document.getElementById("input_addemail")).value = '';
           (<HTMLInputElement>document.getElementById("input_addpassword")).value = '';
         }).catch((err) => {
-          document.getElementById('addMessage').innerText="This Email is already in use";
+          document.getElementById('addMessage').innerText = "This Email is already in use";
           this.message = "This Email is already in use";
         });
     }
     else {
-      document.getElementById('addMessage').innerText="Email or Password Invalid!";
+      document.getElementById('addMessage').innerText = "Email or Password Invalid!";
       this.message = "Email or Password Invalid!";
     }
     this.message = '';
@@ -313,68 +344,69 @@ export class AccountComponent implements OnInit {
     var dbContext = this.GetDBContext();
     //check email and password 
     var input = (<HTMLInputElement>document.getElementById("input_addemailpwd")).value;
-    var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;   
-    var pwd = this.randomPwdGenerator();   
-    if (pattern.test(input)){
+    var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    var pwd = this.randomPwdGenerator();
+    if (pattern.test(input)) {
       this.logSer.addAccountHolders(this.account_id, input)
-      .subscribe((data: any) => {
-       this.GetAccountHolders();
-       document.getElementById('addframeEmailModal').click();            
-      }, error => () => { }, () => { });
+        .subscribe((data: any) => {
+          this.GetAccountHolders();
+          document.getElementById('addframeEmailModal').click();
+        }, error => () => { }, () => { });
     }
     else {
-      document.getElementById('addMessage1').innerText="Email Invalid!";
+      document.getElementById('addMessage1').innerText = "Email Invalid!";
       this.message = "Email Invalid!";
     }
     this.message = '';
   }
 
-   randomPwdGenerator()  {
+  randomPwdGenerator() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
+
     for (var i = 0; i < 6; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
+
     return text;
   }
-  
 
-  sendLoginCode() {   
+
+  sendLoginCode() {
     const appVerifier = this.windowRef.recaptchaVerifier;
     const num = this.phoneNumber.e164;
     firebase.auth().signInWithPhoneNumber(num, appVerifier)
-      .then(result => {        
+      .then(result => {
         this.windowRef.confirmationResult = result;
-        document.getElementById('showVerificationCode').hidden=false;
+        document.getElementById('showVerificationCode').hidden = false;
       })
       .catch(error => console.log(error));
   }
 
   verificationCode: string;
-  verifyLoginCode() {  
+  verifyLoginCode() {
     this.windowRef.confirmationResult
       .confirm(this.verificationCode)
       .then(result => {
         this.addPhone();
-        document.getElementById('btnframeModalPhone').click();                
+        document.getElementById('btnframeModalPhone').click();
       })
       .catch(error => console.log(error, "Incorrect code entered?"));
   }
 
-  addPhone()
-  {
-    this.logSer.addAccountHolders(this.account_id,this.phoneNumber.e164).subscribe((data: any) => {             
+  addPhone() {
+    this.logSer.addAccountHolders(this.account_id, this.phoneNumber.e164).subscribe((data: any) => {
       this.GetAccountHolders();
     });
-   
+
   }
 
   onDeleteAssociatePhone(id: string) {
-    this.logSer.deleteAccountHolders(id).subscribe((data: any) => {  
-      this.GetAccountHolders();           
+    this.logSer.deleteAccountHolders(id).subscribe((data: any) => {
+      this.grantSuccess="";
+      this.grantSuccessPhone="";
+      this.GetAccountHolders();
     });
-  
+
   }
 
   private GetDBContext(): any {
@@ -395,10 +427,10 @@ export class AccountComponent implements OnInit {
     return secondayFirebase;
   }
 
-  signIntoDB() {  
-    this.logSer.addAccountHolders(this.account_id,this.afAuth.auth.currentUser.email)
+  signIntoDB() {
+    this.logSer.addAccountHolders(this.account_id, this.afAuth.auth.currentUser.email)
       .subscribe((data: any) => {
-       this.GetAccountHolders();
+        this.GetAccountHolders();
       }, error => () => { }, () => { });
   }
 
@@ -411,7 +443,7 @@ export class AccountComponent implements OnInit {
       this.logSer.addLoginDetails(account_id, ip, 'active', 'allowed', login)
         .subscribe((res1: Boolean) => {
           //this.router.navigate(['Subscription']);
-           
+
         }, error => () => { }, () => { });
     }, error => () => { }, () => { });
   }

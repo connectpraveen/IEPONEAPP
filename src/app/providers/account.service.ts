@@ -13,11 +13,14 @@ import { pipe } from '../../../node_modules/@angular/core/src/render3/pipe';
 @Injectable()
 export class AccountService {
   private servletUrl;private localservletUrl;headers: any;
+  private clientURL;private nodeURL;
   options: RequestOptions;
   
   constructor(private http: Http, private _http: HttpClient, private shareSer: SharedDataService, private _firebaseDbContext: AngularFireDatabase) {
     this.servletUrl = shareSer.getServletUrl();
     this.localservletUrl = shareSer.getlocalServletUrl();
+    this.clientURL=shareSer.getClientUrl();
+    this.nodeURL=shareSer.getNodeUrl();
   }
 
 
@@ -83,10 +86,50 @@ export class AccountService {
     };
     return this._http.post(this.servletUrl + 'login', acc_object, httpOptions).pipe(map(data => {    
       return data;
+    }));    
+  }
 
-    }));
-
-    
+  updateAccountHolder(id,account_id,identityProvider,accountHolderId) {
+    var acc={
+      "accountId": account_id,
+      "identityProvider":identityProvider,
+      "accountHolderId": accountHolderId,
+      "verification": "Verified",
+      "correspondence": "",
+      "profileAccess": "1",
+      "associationType": "Primary",
+      "message": "Updated",
+      "userUpdated": "updated from web app"
+  }    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'        
+      })
+    };
+    return this._http.put(this.servletUrl + 'accountHolder/'+id, acc, httpOptions).pipe(map(data => {    
+      return data;
+    }));    
+  }
+  updateAccountHolderGrant(id,account_id,identityProvider,accountHolderId,Verified) {
+    var acc={
+      "accountId": account_id,
+      "identityProvider":identityProvider,
+      "accountHolderId": accountHolderId,
+      "verification": Verified,
+      "correspondence": "",
+      "profileAccess": "1",
+      "associationType": "Secondary",
+      "message": "Updated",
+      "userUpdated": "updated from web app"
+  }    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'        
+      })
+    };
+    return this._http.put(this.servletUrl + 'accountHolder/'+id, acc, httpOptions).pipe(map(data => {    
+      return data;
+    }));    
   }
   saveAccountWithPhone(uid,email,phone_number,ip_address,service_provider) {
     let acc = { 'email': email, 'uid': uid,'phone_number':phone_number,'ip_address':ip_address,'service_provider':service_provider,'action': 'add' };
@@ -118,6 +161,21 @@ export class AccountService {
       })
     };
     return this._http.post(this.servletUrl + 'login', acc_object, httpOptions).pipe(map(data => {
+      return data;
+    }));
+  }
+
+  sendemail(email) {
+    let acc_object={     
+      serverURL: this.clientURL+"?email="+email,
+      mailTo:email
+    }    
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'        
+      })
+    };
+    return this._http.post(this.nodeURL+"sendemail", acc_object, httpOptions).pipe(map(data => {
       return data;
     }));
   }

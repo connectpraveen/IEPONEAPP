@@ -94,7 +94,9 @@ export class LoginComponent implements OnInit {
     this.windowRef.confirmationResult
       .confirm(this.verificationCode)
       .then(result => {
-        this.currentUser = result.user;       
+        this.currentUser = result.user;  
+        console.log("Phone verified")     ;
+        
         this.accountPhoneFirebaseService.getPhoneParentId(result.user.uid).then((parentId: string) => {
           this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
           this.accser.saveAccountDataPhoneServlet(result.user.uid,'',result.user.phoneNumber,'',  result.user.providerData[0].providerId)
@@ -103,10 +105,10 @@ export class LoginComponent implements OnInit {
               localStorage.setItem("account_id",data.id);             
               localStorage.setItem("email", result.user.phoneNumber);    
               localStorage.setItem("display_name", result.user.phoneNumber); 
-              console.log("UID"+ result.user.uid);
-              console.log("account_id"+data.id);
-              console.log("Phone"+result.user.phoneNumber);
-              //this.router.navigate(['Account']);                         
+              console.log(result.user.uid);
+              console.log(data.id);
+              console.log( result.user.phoneNumber);              
+              this.router.navigate(['Account']);                         
             }, error => () => { }, () => { });
         });
       })
@@ -145,7 +147,7 @@ export class LoginComponent implements OnInit {
         this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
           this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
           this.accser.saveAccountDataEmailServlet(res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
-            .subscribe((data: any) => {
+            .subscribe((data: any) => {                              
               this.router.navigate(['Account']);          
             }, error => () => { }, () => { });});
       })
@@ -244,6 +246,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("account_id",data.id);             
         localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
         localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);       
+        localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);                  
         this.router.navigate(['Account']);
       }, error => () => { }, () => { })
     });    
