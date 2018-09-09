@@ -16,9 +16,11 @@ import { Observable } from '../../../node_modules/rxjs';
   providers:[AccountService,SharedDataService,LoginService,AuthService,SubscribeService]
 })
 export class SubscriptionComponent implements OnInit {
+  chargeAmount=50.55;
+  paymentResponse:any;
   private currentUser: firebase.User;
   showSignout= false;
-  accdata:Observable<any[]>;
+  accdata:any;
   subscription:any;
   account_id:string;
   currentUsername: string; authState: any = null;
@@ -35,13 +37,18 @@ export class SubscriptionComponent implements OnInit {
     if (this.afAuth.auth.currentUser) {    
       if (this.afAuth.auth.currentUser.displayName)      
       this.showSignout= true;         
-      this.accdata= this.subsciption.getAccountDetails(this.account_id);
+      this.accdata= this.subsciption.getSubscriptionDetails(this.account_id);
+     
       this.accdata.forEach(element => {
-        this.subscription=element[0].subscription[0];
-        
+       this.subscription=element.data[0];       
       });
      
     }
+  }
+
+  onPaymentStatus(response):void
+  {
+  this.paymentResponse=response;  
   }
 
 

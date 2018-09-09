@@ -27,30 +27,24 @@
                     <mdb-card-body>                          
                         <div class="form-group">
                             <label for="exampleInputEmail1">Subscription Code:
-                                <b>{{subscription.subscription_code}}</b>
+                                <b>{{subscription.subscriptionCode}}</b>
                             </label>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Status:
-                                <b>Active</b>
+                                <b>{{subscription.status}}</b>
                             </label>
                         </div>
                         <div class="form-group">
                                 <label for="exampleInputEmail1">Subscription Date:
-                                    <b>{{subscription.subscription_date}}</b>
+                                    <b>{{subscription.subscriptionStartDate}}</b>
                                 </label>
-                            </div>
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Expiration Date:
-                                <b>{{subscription.subscription_enddate}}</b>
-                            </label>
-                        </div>
+                            </div>                      
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Last Payment:
-                                <b>31-July-2018</b>
+                                <b>{{subscription.lastPayment}}</b>
                             </label>
                         </div>
                         <div class="form-group">
@@ -60,13 +54,13 @@
                             <div class="btn-group">
 
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios1"checked="{{subscription.auto_payment}}">
+                                    <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios1" checked="{{subscription.autoPayment==1}}">
                                     <label class="custom-control-label" for="defaultUnchecked1">On</label>
                                 </div>
 
                                 <!-- Default checked -->
                                 <div style="margin-left: 10px;" class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="defaultChecked1" name="defaultExampleRadios1" checked="{{!subscription.auto_payment}}">
+                                    <input type="radio" class="custom-control-input" id="defaultChecked1" name="defaultExampleRadios1" checked="{{subscription.autoPayment==0}}">
                                     <label class="custom-control-label" for="defaultChecked1">Off</label>
                                 </div>
 
@@ -90,17 +84,17 @@
             <mdb-card-body>
                 <mdb-card style="margin: 15px; max-width: 500px;">
                     <mdb-card-body>
-                        <div class="form-group">
+                            <div class="form-group">                     
+                                    <div class="btn-group">
                             <label for="exampleInputEmail1">Number of profile</label>
-                            <input type="number" style="max-width: 100px;" class="form-control" name="name" id="input" placeholder="1" required>
+                            <input type="number" style="max-width: 100px; margin-left: 10px;" class="form-control" name="name" id="input" placeholder="1" required>
                         </div>
-                        <div class="form-group">
-                            <div class="clearfix">
-                                <label for="exampleInputPassword1">Subscription Type</label>
-                            </div>
+                        </div>
+                        <div class="form-group">                     
                             <div class="btn-group">
-
-                                <div class="custom-control custom-radio">
+                                    <label for="exampleInputPassword1">Subscription Type</label>
+                                <div class="custom-control custom-radio" style="margin-left: 10px;">
+                                   
                                     <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
                                     <label class="custom-control-label" for="defaultUnchecked">Enterprize</label>
                                 </div>
@@ -115,21 +109,27 @@
                             <div class="form-group" style="margin-top: 15px;">
                                 <div class="clearfix">
                                     <label for="exampleInputEmail1">Price</label>
+                                    <label style="margin-left: 10px;">{{chargeAmount}}</label>
                                 </div>
-                                <input disabled="true" type="number" style="max-width: 100px;" class="form-control" name="name" id="input" placeholder="$29.99"
-                                    required>
+                             
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <button (click)="SaveProfile()" type="button" id="loginButton" class="btn btn-primary btn-block">
-                                Payment
-                            </button>
-                        </div>
+                        </div>                        
+                        <p>
+                            <ngx-braintree 
+                            [clientTokenURL]="'http://localhost:3000/client_token'" 
+                            [createPurchaseURL]="'http://localhost:3000/checkout'"
+                            [chargeAmount] ="chargeAmount"
+                            (paymentStatus)="onPaymentStatus($event)"
+                            [showCardholderName]="true">
+                          </ngx-braintree>  
+                        </p>
                         <label>{{message}}</label>
                     </mdb-card-body>
                 </mdb-card>
             </mdb-card-body>
         </mdb-card>
     </div>
+
     <!--/.Panel 1-->
 </div>
+<pre>{{paymentResponse|json}}</pre>

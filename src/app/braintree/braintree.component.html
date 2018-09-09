@@ -1,8 +1,9 @@
+<label>Charge Amount = {{chargeAmount}}</label>
 <p>
     <ngx-braintree 
     [clientTokenURL]="'http://localhost:3000/client_token'" 
     [createPurchaseURL]="'http://localhost:3000/checkout'"
-    [chargeAmount] ="10"
+    [chargeAmount] ="chargeAmount"
     (paymentStatus)="onPaymentStatus($event)"
     [showCardholderName]="true">
   </ngx-braintree>  

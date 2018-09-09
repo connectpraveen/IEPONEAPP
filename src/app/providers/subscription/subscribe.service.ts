@@ -13,11 +13,10 @@ export class SubscribeService {
     this.servletUrl = shareSer.getServletUrl();
   }
 
-  getAccountDetails(id): Observable<any[]> {
-    let subscribe = { 'account_id': id, 'action': 'fetch-details' };
-    return this._http.get<any[]>(this.servletUrl + 'Account?' + JSON.stringify(subscribe))
+  getSubscriptionDetails(id){    
+    return this._http.get(this.servletUrl + 'subscriptions/forAccountId/' +id)
       .pipe(map(data => {
-        return <any[]>data;
+        return data;
       }));
   }
 

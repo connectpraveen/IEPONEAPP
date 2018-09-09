@@ -21,6 +21,7 @@ import { AccountGmailFirebaseService } from '../providers/firebase/account-gmail
   providers: [AccountService, SharedDataService, LoginService, AuthService, SubscribeService, ProfileService, DatePipe]
 })
 export class BraintreeComponent implements OnInit {
+  chargeAmount=50.55;
   private currentUser: firebase.User;
   paymentResponse:any;
   authState: any = null;
@@ -37,8 +38,7 @@ export class BraintreeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.name= this.afAuth.auth.currentUser.displayName;
-    
+    //this.name= this.afAuth.auth.currentUser.displayName;    
   }
   onPaymentStatus(response):void
   {
