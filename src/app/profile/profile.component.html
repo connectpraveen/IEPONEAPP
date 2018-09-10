@@ -22,14 +22,10 @@
       </mdb-card-header>
       <mdb-card-body>
         <mdb-card style="margin: 15px; max-width: 500px;">
-          <mdb-card-body>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Name</label>
-              <input type="text" class="form-control" name="name" id="input" placeholder="Name" required>
-            </div>
+          <mdb-card-body>         
             <div class="form-group">
               <label for="exampleInputPassword1">Age</label>
-              <input type="number" class="form-control" id="age" name="age" placeholder="Age" required>
+              <input type="number" [(ngModel)]='age'  class="form-control" id="age" name="age" placeholder="Age" required>
             </div>
             <div class="form-group">
               <div class="clearfix">
@@ -38,13 +34,13 @@
               <div class="btn-group">
                 <!-- Default unchecked -->
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                  <input type="radio" (click)="changegender('Male')" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
                   <label class="custom-control-label" for="defaultUnchecked">Male</label>
                 </div>
 
                 <!-- Default checked -->
                 <div class="custom-control custom-radio" style="margin-left: 10px;">
-                  <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+                  <input type="radio" (click)="changegender('Female')" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
                   <label class="custom-control-label" for="defaultChecked">Female</label>
                 </div>
               </div>
@@ -101,7 +97,7 @@
           <thead>
           </thead>
           <tbody>
-            <tr *ngFor="let row of filterProfilesOfType('not subscribed')">
+            <tr *ngFor="let row of profiles">
               <!-- Card -->
               <mdb-card style="max-width: 300px; max-height: 250px; margin: 10px;">
                 <mdb-card-body>
@@ -111,9 +107,9 @@
                   </div>
                   <!--Card content-->
                   <mdb-card-title>
-                    <h4>Age: 15 Years</h4>
+                    <h4>Age: {{row.age}}</h4>
                     <br>
-                    <h4>Gender: Male</h4>
+                    <h4>Gender: {{row.gender}}</h4>
                   </mdb-card-title>
                   <!--Text-->
                 </mdb-card-body>
@@ -124,7 +120,7 @@
       </mdb-card-body>
     </mdb-card>
 
-    <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 70px;">
+    <mdb-card [hidden]="true" style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 70px;">
       <mdb-card-header class="primary-color white-text">
         <h6>Profile Not Added to the Account</h6>
       </mdb-card-header>

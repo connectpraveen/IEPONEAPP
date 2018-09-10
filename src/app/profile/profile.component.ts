@@ -30,11 +30,11 @@ export class ProfileComponent implements OnInit {
   //Avatars: Avatar[];
   selectedBodystyle: string;
   avatarUrl = '';
-  gender = 'boy';
-  age = '0';
+  gender = 'Female';
+  age = '5';
   avatarId = '0';
   showSuccess = false;
-  profiles: Profile[] = [];
+  profiles:any;
   currentAccount: Account;
   avatarUrls: String[] = [];
   order = 'avatar_id';
@@ -67,13 +67,13 @@ export class ProfileComponent implements OnInit {
     }
     this.auth = this.shared.getAuth();
     this.profSer.getProfiles(this.account_id)
-      .subscribe((res: Profile[]) => {
-        this.profiles = res;
+      .subscribe((res: any) => {
+        this.profiles=res.data;        
       }, error => () => { }, () => { });
 
   }
   filterProfilesOfType(type) {
-    return this.profiles.filter(x => x.status == type);
+    //return this.profiles.filter(x => x.status == type);
   }
   onAgeSelect(e) {
     this.age = e.target.value;
@@ -91,15 +91,19 @@ export class ProfileComponent implements OnInit {
   }
 
   SaveProfile() {
-    this.profSer.SaveProfile(this.account_id, "D00281313178")
+    this.profSer.SaveProfile(this.account_id, this.age,this.gender)
       .subscribe((res) => { 
         this.message = "Profile Added Successfully";
         this.profSer.getProfiles(this.account_id)
-        .subscribe((res: Profile[]) => {
-          this.profiles = res;
+        .subscribe((res: any) => {          
+          this.profiles = res.data;
         }, error => () => { }, () => { });
       }, error => () => { }, () => { });
 
+  }
+  changegender(gender)
+  {    
+    this.gender=gender;
   }
 
 }

@@ -6,6 +6,7 @@ import { Http, Response, RequestOptions, RequestOptionsArgs, Headers } from '@an
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { map } from 'rxjs/operators';
 import { SharedDataService } from '../../shared/shared-data.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class ProfileService {
@@ -14,20 +15,36 @@ export class ProfileService {
     this.servletUrl = shareSer.getServletUrl();
   }
 
-  getProfiles(id): Observable<Profile[]> {
-    let profile = { 'account_id': id, 'action': 'fetch' };
-    return this._http.get<Profile[]>(this.servletUrl + 'Profile?' + JSON.stringify(profile))
-      .pipe(map(data => {
-        return <Profile[]>data;
-      }));
-  }
-
-  SaveProfile(id,device_id){
-    let profile = { 'account_id': id,'device_id': device_id,'status': 'not subscribed','action': 'add' };
-    return this._http.get(this.servletUrl + 'Profile?' + JSON.stringify(profile))
+  getProfiles(id) {
+    
+    return this._http.get<Profile[]>(this.servletUrl + 'profilesForAccountId/' + id)
       .pipe(map(data => {
         return data;
       }));
+  }
+
+  SaveProfile(account_id,age,gender){
+    var uniq=new Date().getTime();
+    let profile ={
+    "userUpdated": "admin",
+    "accountId": account_id,
+    "profileId": "PRO"+uniq,
+    "deviceId": "",
+    "companionId": "",
+    "status": "Active",
+    "message": "Added from web UI",
+    "age":age,
+    "gender":gender
+  }
+
+  const httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json'        
+    })
+  };
+  return this._http.post(this.servletUrl + 'profiles', profile, httpOptions).pipe(map(data => {    
+    return data;
+  })); 
   }
 
 
