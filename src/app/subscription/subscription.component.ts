@@ -16,40 +16,72 @@ import { Observable } from '../../../node_modules/rxjs';
   providers:[AccountService,SharedDataService,LoginService,AuthService,SubscribeService]
 })
 export class SubscriptionComponent implements OnInit {
+  subscriptionFound=false;
   chargeAmount=50.55;
   paymentResponse:any;
   private currentUser: firebase.User;
   showSignout= false;
   accdata:any;
-  subscription:any;
+  subscriptionData={
+    "id": 3,
+    "createdDate": "",
+    "updatedDate": "",
+    "userUpdated": "admin",
+    "accountId": 9,
+    "subscriptionCode": "",
+    "subscriptionStartDate": "",
+    "status": "",
+    "totalPayment": 30,
+    "freeDays": 55,
+    "autoPayment": 0,
+    "lastPayment": "",
+    "nextPaymentDate": "",
+    "priceId": 1,
+    "discountId": 1
+};
   account_id:string;
   currentUsername: string; authState: any = null;
   constructor(private accser: AccountService, private shared: SharedDataService,
     private logSer: LoginService, public afAuth: AngularFireAuth, 
-    private authService: AuthService, private subsciption:SubscribeService  ) {
+    private authService: AuthService, private subsciptionsvc:SubscribeService  ) {
     this.afAuth.authState.subscribe((auth) => {
       this.authState = auth
       this.currentUser = this.afAuth.auth.currentUser
     });
   }
-  ngOnInit() {    
-    this.account_id = localStorage.getItem("account_id");
-    if (this.afAuth.auth.currentUser) {    
-      if (this.afAuth.auth.currentUser.displayName)      
+  ngOnInit() {   
+    
+    this.account_id = localStorage.getItem("account_id");  
       this.showSignout= true;         
-      this.accdata= this.subsciption.getSubscriptionDetails(this.account_id);
-     
-      this.accdata.forEach(element => {
-       this.subscription=element.data[0];       
-      });
-     
-    }
+      this.getSubscription(); 
   }
 
   onPaymentStatus(response):void
   {
+    this.subsciptionsvc.saveSubscriptionServlet(this.account_id,this.chargeAmount).subscribe((data: any) => {
+      this.getSubscription();
+     }, error => () => { }, () => { });      
   this.paymentResponse=response;  
+
   }
-
-
+  
+  getSubscription()
+  {
+    this.subsciptionsvc.getSubscriptionDetails(this.account_id)  
+    .subscribe((data: any) => {
+     if(data.data.length>0)
+     {
+      this.subscriptionFound=true;
+     this.subscriptionData=data.data[0];
+     }
+    }, error => () => { }, () => { });    
+  }
+  getAutoPay()
+  {
+    return true;
+  }
+  getAutoPayOff()
+  {
+    return false;
+  }
 }

@@ -28,8 +28,7 @@ export class LoginService {
      return this._http.get<Login[]>(this.servletUrl + 'loginHistory/' + id).pipe(map(data => {
              return <Login[]>data; }));
   }
-  getAccountHolders(id): Observable<any[]> { 
-    console.log(id)     ;
+  getAccountHolders(id): Observable<any[]> {     
     return this._http.get<any[]>(this.servletUrl + 'accountHolders/' + id).pipe(map(data => {
             return <any[]>data; }));
  }

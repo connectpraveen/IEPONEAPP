@@ -75,8 +75,7 @@ export class AuthService {
   }
 
 
-  signIn(email, password) {
-    console.log(password);
+  signIn(email, password) {    
     return this._firebaseAuth.auth.signInWithEmailAndPassword(email, password)
   }
 

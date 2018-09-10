@@ -17,7 +17,7 @@
 <div class="tab-content">
     <!--Panel 1-->
     <div class="tab-pane fade in show active" id="panel5" role="tabpanel">
-        <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px;">
+        <mdb-card [hidden]="!subscriptionFound" style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 15px;">
             <mdb-card-header class="primary-color white-text">
                 <h6>Subscription</h6>
             </mdb-card-header>
@@ -27,24 +27,24 @@
                     <mdb-card-body>                          
                         <div class="form-group">
                             <label for="exampleInputEmail1">Subscription Code:
-                                <b>{{subscription.subscriptionCode}}</b>
+                                <b>{{subscriptionData.subscriptionCode}}</b>
                             </label>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Status:
-                                <b>{{subscription.status}}</b>
+                                <b>{{subscriptionData.status}}</b>
                             </label>
                         </div>
                         <div class="form-group">
                                 <label for="exampleInputEmail1">Subscription Date:
-                                    <b>{{subscription.subscriptionStartDate}}</b>
+                                    <b>{{subscriptionData.subscriptionStartDate}}</b>
                                 </label>
                             </div>                      
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">Last Payment:
-                                <b>{{subscription.lastPayment}}</b>
+                                <b>{{subscriptionData.lastPayment}}</b>
                             </label>
                         </div>
                         <div class="form-group">
@@ -54,20 +54,20 @@
                             <div class="btn-group">
 
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="defaultUnchecked1" name="defaultExampleRadios1" checked="{{subscription.autoPayment==1}}">
-                                    <label class="custom-control-label" for="defaultUnchecked1">On</label>
+                                    <input type="radio" checked="true" class="custom-control-input" id="defaultChecked1" name="defaultExampleRadios1">
+                                    <label class="custom-control-label" for="defaultChecked1">On</label>
                                 </div>
 
                                 <!-- Default checked -->
                                 <div style="margin-left: 10px;" class="custom-control custom-radio">
-                                    <input type="radio" class="custom-control-input" id="defaultChecked1" name="defaultExampleRadios1" checked="{{subscription.autoPayment==0}}">
-                                    <label class="custom-control-label" for="defaultChecked1">Off</label>
+                                    <input type="radio" class="custom-control-input" id="defaultUnChecked1" name="defaultExampleRadios2">
+                                    <label class="custom-control-label" for="defaultUnChecked1">Off</label>
                                 </div>
 
                             </div>
                             <div class="form-group">
                                 <button (click)="SaveProfile()" type="button" id="loginButton" class="btn btn-primary btn-block" style="margin-top: 10px;">
-                                    Enroll Auto Payment
+                                    Stop Subscription
                                 </button>
                             </div>
 
@@ -77,7 +77,7 @@
             </mdb-card-body>
         </mdb-card>
 
-        <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 75px;">
+        <mdb-card [hidden]="subscriptionFound" style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 75px;">
             <mdb-card-header class="primary-color white-text">
                 <h6>Add Subscription</h6>
             </mdb-card-header>
@@ -132,4 +132,3 @@
 
     <!--/.Panel 1-->
 </div>
-<pre>{{paymentResponse|json}}</pre>

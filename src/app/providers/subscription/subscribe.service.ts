@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpParams } from '@angular/common/http';
 import { Http, Response, RequestOptions, RequestOptionsArgs } from '@angular/http';
 import { SharedDataService } from '../../shared/shared-data.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class SubscribeService {
@@ -20,7 +21,31 @@ export class SubscribeService {
       }));
   }
 
-
+  saveSubscriptionServlet(account_id,total_payment) {
+    var uniq=new Date().getTime();
+    let acc_object={
+       "userUpdated": "admin",
+       "accountId":account_id,
+       "subscriptionCode": "SUB"+uniq,
+       "subscriptionStartDate": new Date(),
+       "status": "Active",
+       "totalPayment": total_payment,
+       "freeDays": 30,
+       "autoPayment": "1",
+       "lastPayment": new Date(),
+       "nextPaymentDate": new Date(),
+       "priceId": 1,
+       "discountId": 1
+   }       
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'        
+      })
+    };
+    return this._http.post(this.servletUrl + 'subscriptions', acc_object, httpOptions).pipe(map(data => {    
+      return data;
+    }));    
+  }
 
   insertSubscription(account_id, startDate, endDate,payment,cost): Observable<Subscription> {
     let subscribe = { 'account_id': account_id, 'startDate': startDate, 'endDate': endDate,'payment':payment,'cost':cost, 'action': 'add' };

@@ -86,12 +86,9 @@ export class AccountComponent implements OnInit {
     this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
       this.emailVerified = false;
       data.accountHolders.forEach(element => {        
-        if (String(element.accountHolderId).indexOf("@") > 0) {
-          console.log("Email Found");
-          if (String(element.associationType) == "Primary") {
-            console.log("Primary Found");
-            if (String(element.verification) == "Verified") {
-              console.log("Verified Found" + element.verification);
+        if (String(element.accountHolderId).indexOf("@") > 0) {          
+          if (String(element.associationType) == "Primary") {            
+            if (String(element.verification) == "Verified") {              
               this.emailVerified = true;              
             }
           }
@@ -105,8 +102,7 @@ export class AccountComponent implements OnInit {
           //   }
           // }
         }
-      });
-      console.log("Email Verified"+this.emailVerified);
+      });      
     });
     
     if (this.afAuth.auth.currentUser) {
@@ -120,13 +116,10 @@ export class AccountComponent implements OnInit {
 
     }
     this.currentUsername = localStorage.getItem('display_name');
-    this.eMail = localStorage.getItem('display_name');
+    this.eMail = localStorage.getItem('email');
     /* fetch user login details */
-    this.logSer.getLoginDetails(this.uid)
-  
-      .subscribe((data: any) => {
-        console.log(this.uid);
-        console.log(data);
+    this.logSer.getLoginDetails(this.uid)  
+      .subscribe((data: any) => {        
         this.loginDetails = data.data;
         this.loginCount = data.data.length;
       }, error => () => { }, () => { });

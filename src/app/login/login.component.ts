@@ -53,8 +53,7 @@ export class LoginComponent implements OnInit {
     this.activeUser.subscribe(
       (activeUser) => {
         if (activeUser) {
-          this.currentUser = activeUser;
-         // console.log(this.currentUser);
+          this.currentUser = activeUser;         
         }
         else {
           this.currentUser = null;
@@ -94,8 +93,7 @@ export class LoginComponent implements OnInit {
     this.windowRef.confirmationResult
       .confirm(this.verificationCode)
       .then(result => {
-        this.currentUser = result.user;  
-        console.log("Phone verified")     ;
+        this.currentUser = result.user;          
         
         this.accountPhoneFirebaseService.getPhoneParentId(result.user.uid).then((parentId: string) => {
           this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
@@ -104,10 +102,7 @@ export class LoginComponent implements OnInit {
               localStorage.setItem("uid",result.user.uid);           
               localStorage.setItem("account_id",data.id);             
               localStorage.setItem("email", result.user.phoneNumber);    
-              localStorage.setItem("display_name", result.user.phoneNumber); 
-              console.log(result.user.uid);
-              console.log(data.id);
-              console.log( result.user.phoneNumber);              
+              localStorage.setItem("display_name", result.user.phoneNumber);                       
               this.router.navigate(['Account']);                         
             }, error => () => { }, () => { });
         });

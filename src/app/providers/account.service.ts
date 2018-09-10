@@ -77,8 +77,7 @@ export class AccountService {
       "loginServiceProvider":service_provider
       
     }
-    }    
-    console.log(acc_object);
+    }        
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'        
