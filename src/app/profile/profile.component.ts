@@ -18,7 +18,7 @@ import { AccountGmailFirebaseService } from '../providers/firebase/account-gmail
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
+  styleUrls: ['./profile.component.css'],
   providers: [AccountService, SharedDataService, LoginService, AuthService, SubscribeService, ProfileService, DatePipe]
 })
 export class ProfileComponent implements OnInit {

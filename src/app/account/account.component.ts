@@ -22,7 +22,7 @@ import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss'],
+  styleUrls: ['./account.component.css'],
   providers: [AccountService, SharedDataService, LoginService, AuthService, WindowService, DatePipe]
 })
 export class AccountComponent implements OnInit {

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   };
   verificationCode: string;
   windowRef: any;
-  private currentUser: firebase.User;
+  public currentUser: firebase.User;
   model: any = {}; currentAccount: Account;
   message: string;
   errorMessage: string;

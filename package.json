@@ -1,6 +1,7 @@
 {
   "name": "ieponeapp",
   "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -29,6 +30,7 @@
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
     "ngx-braintree": "^6.1.2",
+    "node-sass": "^4.9.3",
     "rxjs": "^6.0.0",
     "zone.js": "~0.8.26"
   },

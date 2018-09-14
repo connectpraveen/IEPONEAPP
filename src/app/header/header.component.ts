@@ -9,7 +9,7 @@ import { AuthService } from '../providers/auth.service'
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrls: ['./header.component.css'],
   providers:[AccountService,AngularFireAuth,SharedDataService]
 })
 export class HeaderComponent implements OnInit {

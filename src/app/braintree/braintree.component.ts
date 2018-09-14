@@ -17,7 +17,7 @@ import { AccountGmailFirebaseService } from '../providers/firebase/account-gmail
 @Component({
   selector: 'app-braintree',
   templateUrl: './braintree.component.html',
-  styleUrls: ['./braintree.component.scss'],
+  styleUrls: ['./braintree.component.css'],
   providers: [AccountService, SharedDataService, LoginService, AuthService, SubscribeService, ProfileService, DatePipe]
 })
 export class BraintreeComponent implements OnInit {

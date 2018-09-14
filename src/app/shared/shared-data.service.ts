@@ -9,7 +9,7 @@ export class SharedDataService {
   private verlink = 'none';
   private userEmail = 'none';
   private clientVerifyURL=' http://localhost:4200/verifyemail';
-  private serverMailerURL='http://localhost:3000/';
+  private serverMailerURL='http://localhost:8080/';
   //private servletUrl = 'https://iepone-account-server.appspot.com/';
   private servletUrl = 'https://iepone-qa-account-server.appspot.com/';
   //private servletUrl = 'http://qa-service-iepone.appspot.com/';

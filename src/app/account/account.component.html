@@ -35,11 +35,11 @@
           <label style="text-transform: capitalize;" [hidden]="emailSaved === false">{{emlMsg}}</label>
           <br>
         </mdb-card-text>
-        <button type="button" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect (click)="loginWithGoogle()" id="addGmail">
+        <button [hidden]="!emailVerified" type="button" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect (click)="loginWithGoogle()" id="addGmail">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Gmail</u>
         </button>
-        <button mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
+        <button [hidden]="!emailVerified" mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
           (click)="frameEmail.show()" id="addframeEmail">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Email</u>
@@ -128,7 +128,7 @@
         </table>
 
         <div class="col-sm-offset-3 col-sm-8">
-          <label id="labelMessage">{{deletedMessage}}</label>
+          <label id="labelMessage"></label>
           <label id="labelMessage">{{grantSuccess}}</label>
         </div>
       </mdb-card-body>
@@ -138,7 +138,7 @@
         <h6>Add / Delete Phone</h6>
       </mdb-card-header>
       <mdb-card-body>
-        <button mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
+        <button [hidden]="!emailVerified" mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
           (click)="framePhone.show()" id="addPhone">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Phone Number</u>

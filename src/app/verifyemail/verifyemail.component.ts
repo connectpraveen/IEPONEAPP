@@ -21,7 +21,7 @@ import { ActivatedRoute, Router, UrlSegment, ParamMap,Params } from '@angular/ro
 @Component({
   selector: 'app-verifyemail',
   templateUrl: './verifyemail.component.html',
-  styleUrls: ['./verifyemail.component.scss'],
+  styleUrls: ['./verifyemail.component.css'],
   providers: [AccountService, SharedDataService, LoginService, AuthService, WindowService, DatePipe]
 })
 export class VerifyemailComponent implements OnInit {
