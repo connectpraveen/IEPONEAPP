@@ -15,6 +15,7 @@ import { WindowService } from '../providers/phone/window.service';
 import { environment } from '../../environments/environment';
 import { AccountEmailFirebaseService } from '../providers/firebase/account-email-firebase.service';
 import { AccountPhoneFirebaseService } from '../providers/firebase/account-phone-firebase.service';
+import { ActivatedRoute, UrlSegment, ParamMap,Params } from '@angular/router';
 
 @Component({
   selector: 'login',
@@ -24,6 +25,7 @@ import { AccountPhoneFirebaseService } from '../providers/firebase/account-phone
 })
 export class LoginComponent implements OnInit {
 
+  email=false;
   user = {
     email: '',
     password: ''
@@ -40,7 +42,7 @@ export class LoginComponent implements OnInit {
   phoneNumber = new PhoneNumber()
   private activeUser: Observable<firebase.User>; 
 
-  constructor(private accser: AccountService, private router: Router, private shared: SharedDataService,
+  constructor(private activatedRoute: ActivatedRoute,private accser: AccountService, private router: Router, private shared: SharedDataService,
     private logSer: LoginService, private datePipe: DatePipe, private authService: AuthService,
     public afAuth: AngularFireAuth, private db: AngularFireDatabase, private win: WindowService,
     private accountEmailFirebaseService: AccountEmailFirebaseService,
@@ -63,6 +65,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+      if(params['email']!=null)
+      this.email =true ;               
+     });
+
     this.currentUser = null;
     this.windowRef = this.win.windowRef;
     try {

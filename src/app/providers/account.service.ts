@@ -100,6 +100,7 @@ export class AccountService {
       "message": "Updated",
       "userUpdated": "updated from web app"
   }    
+  console.log(acc);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'        

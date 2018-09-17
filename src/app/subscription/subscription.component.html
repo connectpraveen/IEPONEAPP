@@ -116,8 +116,8 @@
                         </div>                        
                         <p>
                             <ngx-braintree 
-                            [clientTokenURL]="'http://localhost:8080/client_token'" 
-                            [createPurchaseURL]="'http://localhost:8080/checkout'"
+                            [clientTokenURL]="'https://iepone-qa-account-payserver.appspot.com/client_token'" 
+                            [createPurchaseURL]="'https://iepone-qa-account-payserver.appspot.com/checkout'"
                             [chargeAmount] ="chargeAmount"
                             (paymentStatus)="onPaymentStatus($event)"
                             [showCardholderName]="true">
