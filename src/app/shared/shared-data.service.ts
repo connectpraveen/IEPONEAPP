@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-
+import {environment} from '../../environments/environment'
 @Injectable()
 export class SharedDataService {
 
@@ -8,22 +8,13 @@ export class SharedDataService {
   private orderId = 'none';
   private verlink = 'none';
   private userEmail = 'none';
-  private clientVerifyURL=' https://iepone-qa-account-web.appspot.com/';
-  private serverMailerURL='https://iepone-qa-account-payserver.appspot.com/';
-  //private servletUrl = 'https://iepone-account-server.appspot.com/';
-  private servletUrl = 'https://iepone-qa-account-server.appspot.com/';
-  //private servletUrl = 'http://qa-service-iepone.appspot.com/';
-   //private localservletUrl = 'http://localhost:8080/';
-
-   private localservletUrl = 'https://iepone-qa-account-server.appspot.com/';
-  //private servletUrl = 'http://192.168.99.100:8080/';
-  //private api_url = 'http://35.227.24.81:9000/';
-  //private api_url = 'http://localhost:9000/';
   private uid = 'none';
   private phone = 'none';
-
   private auth = { uid: '', value: '', provider: '', parentId: '' };
-
+  private clientVerifyURL= environment.clientVerifyURL;
+  private serverMailerURL=environment.serverMailerURL;  
+  private servletUrl = environment.servletUrl; 
+  private localservletUrl = environment.localservletUrl;
   /* event to display template based on show */
   showPageEvent: EventEmitter<string> = new EventEmitter<string>();
 

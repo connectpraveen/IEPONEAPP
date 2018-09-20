@@ -12,14 +12,13 @@ export const environment = {
     projectId: "iepone-qa-account-web",
     storageBucket: "iepone-qa-account-web.appspot.com",
     messagingSenderId: "1079467976224"
- }
-
-  /*firebase: {
-    apiKey: "AIzaSyBi9GItI8XWcXEX54dgmH2SKQsDWyZLdoA",
-    authDomain: "angularjs-demo-11570.firebaseapp.com",
-    databaseURL: "https://angularjs-demo-11570.firebaseio.com",
-    projectId: "angularjs-demo-11570",
-    storageBucket: "angularjs-demo-11570.appspot.com",
-    messagingSenderId: "902914030574"
-  }*/
+ },
+ clientVerifyURL:' https://iepone-qa-account-web.appspot.com/',
+ serverMailerURL:'https://iepone-qa-account-payserver.appspot.com/',
+ servletUrl: 'https://iepone-qa-account-server.appspot.com/',
+ localservletUrl: 'https://iepone-qa-account-server.appspot.com/',
+ clientTokenURL:'https://iepone-qa-account-payserver.appspot.com/client_token',
+ createPurchaseURL:'https://iepone-qa-account-payserver.appspot.com/checkout',
+ clientTokenURL_Local:'http://localhost:8080/client_token',
+ createPurchaseURL_Local:'http://localhost:8080/checkout'
 };

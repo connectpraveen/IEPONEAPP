@@ -8,7 +8,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../providers/auth.service';
 import { SubscribeService } from '../providers/subscription/subscribe.service';
 import { Observable } from '../../../node_modules/rxjs';
-
+import {environment} from '../../environments/environment'
 @Component({
   selector: 'app-subscription',
   templateUrl: './subscription.component.html',
@@ -16,6 +16,8 @@ import { Observable } from '../../../node_modules/rxjs';
   providers:[AccountService,SharedDataService,LoginService,AuthService,SubscribeService]
 })
 export class SubscriptionComponent implements OnInit {
+  clientTokenURL=environment.clientTokenURL;
+  createPurchaseURL=environment.createPurchaseURL;
   subscriptionFound=false;
   chargeAmount=50.55;
   paymentResponse:any;
