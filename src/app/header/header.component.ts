@@ -32,12 +32,8 @@ export class HeaderComponent implements OnInit {
           uid= this.sharedService.getAuth().uid;
           this.sharedService.clearAuth();
       }
-    this.accser.signOutAccount(uid)
-            .subscribe((acc: number) => {                          
-                this.showSignout = false;
-                this.router.navigate(['/login']);
-      }, error => () => { }, () => { });
-   
+      this.showSignout = false;
+      this.router.navigate(['/login']);
     //window.location.href = 'https://iepone-qa-account-web.appspot.com/';
   }
 

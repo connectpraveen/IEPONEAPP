@@ -5,5 +5,24 @@ handlers:
 - url: /
   static_files: dist/index.html
   upload: dist/index.html
+- url: /Account
+  static_files: dist/index.html
+  upload: dist/index.html  
+- url: /Subscription
+  static_files: dist/index.html
+  upload: dist/index.html  
+- url: /Profile
+  static_files: dist/index.html
+  upload: dist/index.html    
 - url: /
   static_dir: dist
+- url: /Account
+  static_dir: dist  
+- url: /Subscription
+  static_dir: dist  
+- url: /Profile
+  static_dir: dist  
+
+  
+
+  

@@ -186,37 +186,6 @@ export class AccountService {
     }));
   }
 
-  saveAccountWithName(name, uid) {
-    let acc = { 'uid': uid, 'name': name, 'action': 'save-name' };
-    return this._http.get<string>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe(map(data => {
-      return <string>data;
-    }));
-  }
-
-  /* function to update the email id */
-  updateEmail(uid, email): Observable<number> {
-    let acc = { 'email': email, 'uid': uid, 'action': 'update-email' };
-    return this._http.get<number>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe(map(data => {
-      return <number>data;
-    }));
-  }
-
-  /* function to update the phone number */
-  updatePhone(phone, uid): Observable<number> {
-    let acc = { 'uid': uid, 'phone': phone, 'action': 'update-phone' };
-    return this._http.get<number>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe(map(data => {
-      return <number>data;
-    }));
-  }
-
-  /* insert user into Subscriber */
-  signOutAccount(uid): Observable<number> {
-    let acc = { 'uid': uid, 'action': 'sign-out' };
-    return this._http.get<number>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe(map(data => {
-      return <number>data;
-    }));
-  }
-
   /* get the account details given email id*/
   getAccountfromUID(uid): Observable<string> {
     let acc = { 'uid': uid, 'action': 'find' };
@@ -234,21 +203,6 @@ export class AccountService {
       }));
   }
 
-  register(email): Observable<string> {
-    let acc = { 'uid': '', 'email': email, 'action': 'register' };
-    return this._http.get<string>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc)).pipe
-      (map(data => {
-        return <string>data;
-      }));
-  }
-
-  AddAssociatedEmailPhone(email, phone, password, uid): Observable<string> {
-    let acc = { 'uid': '', 'email': email, 'action': 'register' };
-    return this._http.get<string>(this.servletUrl + 'GetUserAccount?' + JSON.stringify(acc))
-      .pipe(map(data => {
-        return <string>data;
-      }));
-  }
 
   GrantAssociateEmail(flag,email)
   {

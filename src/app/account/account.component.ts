@@ -168,15 +168,7 @@ export class AccountComponent implements OnInit {
       .subscribe((data: any) => {       
       }, error => () => { }, () => { });
   }
-  onSave() {
-    this.accser.updatePhone(this.model.phone, this.uid)
-      .subscribe((data: number) => {
-        if (data > 0) {
-          this.phoneSaved = true;
-          this.enableSave = false;
-        }
-      }, error => () => { }, () => { });
-  }
+
   onSaveChangedPwd() {
     if (this.afAuth.auth.currentUser) {
       this.currentUser = this.afAuth.auth.currentUser;
@@ -186,22 +178,6 @@ export class AccountComponent implements OnInit {
         console.log(error)
       });
     }
-  }
-  onSaveChangeEmail() {
-    document.getElementById("input").setAttribute(
-      "style", "border-color: rgba(66, 110, 244, 1); box - shadow: 2px 4px 4px rgba(229, 103, 23, 0.075) inset, 2px 2px 10px rgba(229, 103, 23, 0.6);  outline: 0 none;");
-    setTimeout(function () {
-      document.getElementById("input").focus()
-    }, 1000);
-    //document.getElementById("input").setAttribute("placeholder", "Enter new Email and save");
-    document.getElementById("emailSave").style.display = "inline";
-    this.currentUser = this.afAuth.auth.currentUser;
-    this.currentUser.updateEmail(this.model.email).then(result => {
-      this.updateEmail();
-
-    }).catch(function (error) {
-      console.log(error)
-    });
   }
 
   onSaveEmail() {
@@ -239,19 +215,7 @@ export class AccountComponent implements OnInit {
       document.getElementById('labelMessage').style.display = 'inline';
     }
   }
-  onSaveChangedEmail() {
-    this.currentUser = this.afAuth.auth.currentUser;
-    this.currentUser.updateEmail(this.model.email).then(result => {
-      this.updateEmail()
-    }).catch(function (error) {
-      console.log(error)
-    });
-  }
-  updateEmail() {
-    this.accser.updateEmail(this.currentUser.uid, this.model.email)
-      .subscribe((data: number) => {
-      }, error => () => { }, () => { });
-  }
+
   onShowPlatformLogin() {
     if (document.getElementById("loginhistory").hidden == true)
       document.getElementById("loginhistory").hidden = false;
@@ -291,7 +255,10 @@ export class AccountComponent implements OnInit {
           //password: 'abcd',
           parentId: this.auth.parentId, // parent-Id of current login user
           email: res.user.email
-        });       // this.signIntoDB();
+        });  
+        this.accser.sendemail(res.user.email)
+        .subscribe((data: any) => {       
+        }, error => () => { }, () => { });     // this.signIntoDB();
       })
       .catch((error) => {
         /*let result = this.linkAccount(error);
@@ -334,15 +301,30 @@ export class AccountComponent implements OnInit {
   }
 
   onSaveAssociateEmailPwdAddress() {
-    var dbContext = this.GetDBContext();
-    //check email and password 
     var input = (<HTMLInputElement>document.getElementById("input_addemailpwd")).value;
     var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     var pwd = this.randomPwdGenerator();
     if (pattern.test(input)) {
       this.logSer.addAccountHolders(this.account_id, input)
         .subscribe((data: any) => {
-          this.GetAccountHolders();
+          this.authService.createUser(input, pwd)
+          .then((res) => {     
+            this.afAuth.auth.sendPasswordResetEmail(input).then(function () {                 
+            }).catch((error) => {            
+            }); 
+          })
+          .catch((err) => {       
+            if (err.code == 'auth/email-already-in-use') {    
+              this.afAuth.auth.sendPasswordResetEmail(input).then(function () {            
+              }).catch((error) => {            
+              });            
+            }
+            else {         
+            }
+          });
+       
+          this.GetAccountHolders();           
+          this.grantSuccess="Email has been added and password reset link has been sent";
           document.getElementById('addframeEmailModal').click();
         }, error => () => { }, () => { });
     }

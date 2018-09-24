@@ -85,6 +85,8 @@ export class LoginComponent implements OnInit {
 
         this.windowRef.recaptchaWidgetId = widgetId
       });
+
+     // this.signInWithEmail();
   }
   
   sendLoginCode() {
@@ -123,14 +125,12 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithGoogle() {
+    document.getElementById('gmailLogin').innerText ="Login progress.."
     this.authService.signInWithGoogle()
       .then((res) => {
         this.signIntoDB();
       })
-      .catch((error) => {
-        let result = this.linkAccount(error);
-        if (result)
-         this.signIntoDB();
+      .catch((error) => {       
       });
   }
 
@@ -140,108 +140,30 @@ export class LoginComponent implements OnInit {
   }
 
   signInWithEmail() {
-    // if(this.user.email.endsWith('@gmail.com')){
-    //   this.message = "Please login with google";
-    // }
-    // else{
-    this.authService.createUser(this.user.email, this.user.password)
+    if(this.user.email.endsWith('@gmail.com')){
+      this.message = "Please login with google";
+    }
+    else{
+      this.authService.signIn(this.user.email, this.user.password)
       .then((res) => {
-        this.signIntoDB();
-        this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
-          this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-          this.accser.saveAccountDataEmailServlet(res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
-            .subscribe((data: any) => {                              
-              this.router.navigate(['Account']);          
-            }, error => () => { }, () => { });});
+        this.logSer.getIpCliente().subscribe((ip: string) => {
+          this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
+            .subscribe((data:any) => {
+              localStorage.setItem("account_id",data.id);             
+              localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
+              localStorage.setItem("display_name",this.afAuth.auth.currentUser.email);       
+              localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
+              this.router.navigate(['Account']);
+            }, error => () => { }, () => { })
+          });    
       })
-      .catch((err) => {
-        console.log(err);
-        if (err.code == 'auth/email-already-in-use') {
-          this.authService.signIn(this.user.email, this.user.password)
-            .then((res) => {
-
-              this.accountEmailFirebaseService.getEmailParentId(res.user.uid).then((parentId: string) => {
-                this.shared.saveAuth(res.user.uid, res.user.email, res.user.providerData[0].providerId, parentId)
-                this.accser.saveAccountDataEmailServlet( res.user.uid,this.user.email,'','',res.user.providerData[0].providerId)
-                  .subscribe((data: any) => {
-                    this.router.navigate(['Account']);              
-                  }, error => () => { }, () => { });
-              });
-
-
-            })
-            .catch((error) => {
-              this.message = error.message;
-              console.log(error);
-
-            });
-        }
-        else {
-          this.message = "Email or Password Incorrect";
-        }
+      .catch((error) => {
+        this.message = error.message;
+        //console.log(error);
       });
-    //}
+    }
   }
 
-
-  linkAccount(error) {
-    // var existingEmail = null;
-    // var pendingCred = null;
-    // // Account exists with different credential. To recover both accounts
-    // // have to be linked but the user must prove ownership of the original
-    // // account.
-    // if (error.code == 'auth/account-exists-with-different-credential') {
-    //   existingEmail = error.email;
-    //   pendingCred = error.credential;
-    //   // Lookup existing account’s provider ID.
-    //   return firebase.auth().fetchProvidersForEmail(error.email)
-    //     .then(function (providers) {
-    //       if (providers.indexOf(firebase.auth.EmailAuthProvider.PROVIDER_ID) != -1) {
-    //         // Password account already exists with the same email.
-    //         // Ask user to provide password associated with that account.
-    //         var password = window.prompt('Please provide the password for ' + existingEmail);
-    //         return firebase.auth().signInWithEmailAndPassword(existingEmail, password);
-    //       } else if (providers.indexOf(firebase.auth.GoogleAuthProvider.PROVIDER_ID) != -1) {
-    //         var googProvider = new firebase.auth.GoogleAuthProvider();
-    //         // Sign in user to Google with same account.
-    //         googProvider.setCustomParameters({ 'login_hint': existingEmail });
-    //         return firebase.auth().signInWithPopup(googProvider).then(function (result) {
-    //           return result.user;
-    //         });
-    //       } else if (providers.indexOf(firebase.auth.FacebookAuthProvider.PROVIDER_ID) != -1) {
-    //         var fbProvider = new firebase.auth.FacebookAuthProvider();
-    //         // Sign in user to Google with same account.
-    //         fbProvider.setCustomParameters({ 'login_hint': existingEmail });
-    //         return firebase.auth().signInWithPopup(fbProvider).then(function (result) {
-    //           return result.user;
-    //         });
-    //       }
-    //       else if (providers.indexOf(firebase.auth.TwitterAuthProvider.PROVIDER_ID) != -1) {
-    //         var twProvider = new firebase.auth.TwitterAuthProvider();
-    //         // Sign in user to Google with same account.
-    //         twProvider.setCustomParameters({ 'login_hint': existingEmail });
-    //         return firebase.auth().signInWithPopup(twProvider).then(function (result) {
-    //           return result.user;
-    //         });
-    //       }
-    //       else if (providers.indexOf(firebase.auth.GithubAuthProvider.PROVIDER_ID) != -1) {
-    //         var ghProvider = new firebase.auth.GithubAuthProvider();
-    //         // Sign in user to Google with same account.
-    //         ghProvider.setCustomParameters({ 'login_hint': existingEmail });
-    //         return firebase.auth().signInWithPopup(ghProvider).then(function (result) {
-    //           return result.user;
-    //         });
-    //       }
-    //     })
-    //     .then(function (user) {
-    //       // Existing email/password or Google user signed in.
-    //       // Link Facebook OAuth credential to existing account.
-    //       return user.linkWithCredential(pendingCred);
-    //     });
-    // }
-    throw error;
-  }
-  
   signIntoDB() {    
     this.logSer.getIpCliente().subscribe((ip: string) => {
     this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
@@ -249,7 +171,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("account_id",data.id);             
         localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
         localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);       
-        localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);                  
+        localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
         this.router.navigate(['Account']);
       }, error => () => { }, () => { })
     });    

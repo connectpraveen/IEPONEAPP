@@ -104,7 +104,7 @@
             <td>{{oEmailAddress.accountHolderId}}</td>
             <td>
               <div [hidden]="!emailVerified">
-                <a [hidden]="oEmailAddress.associationType=='Primary'" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.id)">
+                <a [hidden]="oEmailAddress.associationType=='Primary' || oEmailAddress.verification!='Verified'" title="delete" class="btn" (click)="onDeleteAssociateEmail(oEmailAddress.id)">
                   <i class="fa fa-trash-o"></i>
                 </a>
                 <label [hidden]="oEmailAddress.associationType!='Primary'">Primary
@@ -112,7 +112,7 @@
               </div>
             </td>
             <td>
-                <div [hidden]="oEmailAddress.profileAccess!=0">
+              <div [hidden]="oEmailAddress.profileAccess!=0 || oEmailAddress.verification!='Verified'">
               <div [hidden]="!emailVerified">
                 <a [hidden]="oEmailAddress.associationType=='Primary'" title="Grant Access" class="btn" (click)="onGrantAssociateEmail(oEmailAddress.id,oEmailAddress.accountHolderId,oEmailAddress.verification)">
                   <i class="fa fa-user-plus"></i>
