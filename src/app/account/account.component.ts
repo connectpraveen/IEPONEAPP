@@ -79,9 +79,9 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
     this.account_id = localStorage.getItem("account_id");
     this.uid = localStorage.getItem("uid");
-    if (this.uid) {
-      this.showSignout = true;
-    }
+    
+    this.showSignout = true;
+   
     this.auth = this.shared.getAuth();
     this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
       this.emailVerified = false;
@@ -164,7 +164,7 @@ export class AccountComponent implements OnInit {
   onVerifyEmail() {
     this.currentUser = this.afAuth.auth.currentUser;
     this.verifyEMail = "Link hasbeen sent to your mail, please verify it";
-    this.accser.sendemail(this.eMail)
+    this.accser.sendemail(this.eMail,this.account_id)
       .subscribe((data: any) => {       
       }, error => () => { }, () => { });
   }
@@ -233,14 +233,14 @@ export class AccountComponent implements OnInit {
   }
 
   onGrantAssociateEmail(id: string, accountHolderId:string, Verified:string) {
-    this.accser.updateAccountHolderGrant(id,this.account_id,"firebase",accountHolderId,Verified).subscribe((data: any) => {  
+    this.accser.updateAccountHolderGrant(id,this.account_id,"Firebase",accountHolderId,Verified).subscribe((data: any) => {  
       this.grantSuccess="Grant was successful!"
       this.GetAccountHolders();
     }, error => () => { }, () => { });
   }
 
   onGrantAssociatePhone(id: string, accountHolderId:string, Verified:string) {
-    this.accser.updateAccountHolderGrant(id,this.account_id,"firebase",accountHolderId,Verified).subscribe((data: any) => {  
+    this.accser.updateAccountHolderGrant(id,this.account_id,"Firebase",accountHolderId,Verified).subscribe((data: any) => {  
       this.grantSuccessPhone="Grant was successful!"
       this.GetAccountHolders();
     }, error => () => { }, () => { });
@@ -256,7 +256,7 @@ export class AccountComponent implements OnInit {
           parentId: this.auth.parentId, // parent-Id of current login user
           email: res.user.email
         });  
-        this.accser.sendemail(res.user.email)
+        this.accser.sendemail(res.user.email,this.account_id)
         .subscribe((data: any) => {       
         }, error => () => { }, () => { });     // this.signIntoDB();
       })

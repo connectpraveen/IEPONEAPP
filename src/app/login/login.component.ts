@@ -144,10 +144,11 @@ export class LoginComponent implements OnInit {
       this.message = "Please login with google";
     }
     else{
-      this.authService.signIn(this.user.email, this.user.password)
-      .then((res) => {
+
+      this.authService.createUser(this.user.email, this.user.password)
+      .then((res) => {     
         this.logSer.getIpCliente().subscribe((ip: string) => {
-          this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
+          this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'Firebase')
             .subscribe((data:any) => {
               localStorage.setItem("account_id",data.id);             
               localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
@@ -155,12 +156,31 @@ export class LoginComponent implements OnInit {
               localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
               this.router.navigate(['Account']);
             }, error => () => { }, () => { })
-          });    
+          }); 
       })
-      .catch((error) => {
-        this.message = error.message;
-        //console.log(error);
-      });
+      .catch((err) => {       
+        if (err.code == 'auth/email-already-in-use') {    
+          this.authService.signIn(this.user.email, this.user.password)
+          .then((res) => {
+            this.logSer.getIpCliente().subscribe((ip: string) => {
+              this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'Firebase')
+                .subscribe((data:any) => {
+                  localStorage.setItem("account_id",data.id);             
+                  localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
+                  localStorage.setItem("display_name",this.afAuth.auth.currentUser.email);       
+                  localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
+                  this.router.navigate(['Account']);
+                }, error => () => { }, () => { })
+              });    
+          })
+          .catch((error) => {
+            this.message = error.message;
+            //console.log(error);
+          });          
+        }
+        else {         
+        }
+      });     
     }
   }
 

@@ -11,7 +11,7 @@ import { SharedDataService } from './shared/shared-data.service';
 })
 export class AppComponent { 
   title:string;
-  email:string;
+  email:string;  
   account_id:string;
   constructor(private accser: AccountService,private logSer: LoginService,private activatedRoute: ActivatedRoute) {  
   }
@@ -19,26 +19,24 @@ export class AppComponent {
     this.title = 'IEP ONE';
 
     this.activatedRoute.queryParams.subscribe((params: Params) => {
-      this.email = params['email'];         
-     });
-     this.account_id=localStorage.getItem("account_id");     
-     this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
-      data.accountHolders.forEach(element => {
-        if (String(element.accountHolderId).indexOf("@") > 0) {
-          if (element.associationType == "Primary") {
-           if(element.accountHolderId==this.email)
-           {
-             console.log("calling verify");
-            this.UpdateVerify(element.id,this.account_id,element.accountHolderId,element.identityProvider);
-           }
-          }
-        }      
+      this.email = params['email'];    
+      this.account_id=params["acc"];     
+      this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
+        data.accountHolders.forEach(element => {
+          if (String(element.accountHolderId).indexOf("@") > 0) {        
+             if(element.accountHolderId==this.email)
+             {             
+              this.UpdateVerify(element.id,this.account_id,element.accountHolderId,element.identityProvider,element.verification,element.correspondence,element.profileAccess,element.associationType);
+             }          
+          }      
+        });
       });
-    });
+     });     
+   
   }
-  UpdateVerify(id,account_id, accountHolderId,identityProvider)
-  {
-   this.accser.updateAccountHolder(id,account_id,identityProvider,accountHolderId).subscribe((data: any) => {  
+  UpdateVerify(id,account_id, accountHolderId,identityProvider,verification,correspondence,profileAccess,associationType)
+  {    
+   this.accser.updateAccountHolder(id,account_id,identityProvider,accountHolderId,"Verified",correspondence,profileAccess,associationType).subscribe((data: any) => {  
   }, error => () => { }, () => { });
   }
  

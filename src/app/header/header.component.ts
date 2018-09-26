@@ -17,13 +17,18 @@ export class HeaderComponent implements OnInit {
   constructor(private sharedService: SharedDataService,private accser: AccountService,private router: Router,
     private authService: AuthService,public afAuth: AngularFireAuth) { }
   ngOnInit() {
-    if(this.afAuth.auth.currentUser || (this.sharedService.getAuth().uid!==''))
+    if(localStorage.getItem("account_id")!="0")
     this.showSignout = true;
-    else this.showSignout = false;    
+    else 
+    { this.showSignout = false; 
+      this.router.navigate(['/login']);
+    }
+      
   }
 
   onSignOut(){
     let uid:string;
+    localStorage.setItem("account_id","0");
     if(this.afAuth.auth.currentUser){
       uid=this.afAuth.auth.currentUser.uid
       this.authService.logout();

@@ -8,7 +8,7 @@ export const environment = {
       storageBucket: "iepone-qa-account-web.appspot.com",
       messagingSenderId: "1079467976224"
    },
-   clientVerifyURL:' https://iepone-qa-account-web.appspot.com/',
+   clientVerifyURL:'https://iepone-qa-account-web.appspot.com/',
    serverMailerURL:'https://iepone-qa-account-payserver.appspot.com/',
    servletUrl: 'https://iepone-qa-account-server.appspot.com/',
    localservletUrl: 'https://iepone-qa-account-server.appspot.com/',

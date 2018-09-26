@@ -28,7 +28,6 @@ import { LoginService } from './providers/login/login.service';
 import { FormsModule }   from '@angular/forms';
 import { NgxBraintreeModule } from 'ngx-braintree';
 import { BraintreeComponent } from './braintree/braintree.component';
-import { VerifyemailComponent } from './verifyemail/verifyemail.component';
 
 let config = new AuthServiceConfig([
   {
@@ -54,8 +53,7 @@ export function provideConfig() {
     AccountComponent,
     SubscriptionComponent,
     ProfileComponent,
-    BraintreeComponent,
-    VerifyemailComponent
+    BraintreeComponent  
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase, 'angular-auth-firebase'),
@@ -93,10 +91,6 @@ export function provideConfig() {
       {
         path:'braintree',
         component:BraintreeComponent        
-      },
-      {
-        path:'verifyemail',
-        component:VerifyemailComponent        
       }
       
     ])

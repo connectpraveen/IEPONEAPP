@@ -42,7 +42,7 @@ addAccountHolders(account_id,accountHolderId) {
     "accountId": account_id,
     "identityProvider": "Firebase",
     "accountHolderId": accountHolderId,
-    "verification": "Not Verified",
+    "verification": "Verified",
     "correspondence": "",
     "profileAccess": "0",
     "associationType": "Secondary",

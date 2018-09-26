@@ -88,15 +88,15 @@ export class AccountService {
     }));    
   }
 
-  updateAccountHolder(id,account_id,identityProvider,accountHolderId) {
+  updateAccountHolder(id,account_id,identityProvider,accountHolderId,verification,correspondence,profileAccess,associationType) {
     var acc={
       "accountId": account_id,
       "identityProvider":identityProvider,
       "accountHolderId": accountHolderId,
-      "verification": "Verified",
-      "correspondence": "",
-      "profileAccess": "1",
-      "associationType": "Primary",
+      "verification": verification,
+      "correspondence":correspondence,
+      "profileAccess": profileAccess,
+      "associationType": associationType,
       "message": "Updated",
       "userUpdated": "updated from web app"
   }    
@@ -165,9 +165,9 @@ export class AccountService {
     }));
   }
 
-  sendemail(email) {
+  sendemail(email,account_id) {
     let acc_object={     
-      serverURL: this.clientURL+"?email="+email,
+      serverURL: this.clientURL+"?email="+email+"&acc="+account_id,
       mailTo:email
     }    
     const httpOptions = {

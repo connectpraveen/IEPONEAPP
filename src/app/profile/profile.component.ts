@@ -61,10 +61,7 @@ export class ProfileComponent implements OnInit {
   }
   ngOnInit() {
     this.account_id = localStorage.getItem("account_id");
-    if (this.afAuth.auth.currentUser) {
-      if (this.afAuth.auth.currentUser.displayName)
-        this.showSignout = true;
-    }
+    this.showSignout=true;
     this.auth = this.shared.getAuth();
     this.profSer.getProfiles(this.account_id)
       .subscribe((res: any) => {
