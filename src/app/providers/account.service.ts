@@ -160,6 +160,7 @@ export class AccountService {
         'Content-Type':  'application/json'        
       })
     };
+    console.log(acc_object);
     return this._http.post(this.servletUrl + 'login', acc_object, httpOptions).pipe(map(data => {
       return data;
     }));

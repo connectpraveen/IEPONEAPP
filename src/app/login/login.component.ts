@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
         this.currentUser = result.user;          
         
         this.accountPhoneFirebaseService.getPhoneParentId(result.user.uid).then((parentId: string) => {
-          this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)
+          this.shared.saveAuth(result.user.uid, result.user.phoneNumber, result.user.providerData[0].providerId, parentId)          
           this.accser.saveAccountDataPhoneServlet(result.user.uid,'',result.user.phoneNumber,'',  result.user.providerData[0].providerId)
             .subscribe((data: any) => {      
               localStorage.setItem("uid",result.user.uid);           
