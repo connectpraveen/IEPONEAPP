@@ -64,28 +64,14 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
-
+  ngOnInit() {    
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       if(params['email']!=null)
       this.email =true ;               
      });
 
     this.currentUser = null;
-    this.windowRef = this.win.windowRef;
-    try {
-      firebase.initializeApp(environment.firebase)
-    } catch (error) {
-    }
-
-    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container')
-    this.windowRef.recaptchaVerifier
-      .render()
-      .then(widgetId => {
-
-        this.windowRef.recaptchaWidgetId = widgetId
-      });
-
+    this.windowRef = this.win.windowRef;    
      // this.signInWithEmail();
   }
   
@@ -113,15 +99,17 @@ export class LoginComponent implements OnInit {
               localStorage.setItem("account_id",data.id);             
               localStorage.setItem("email", result.user.phoneNumber);    
               localStorage.setItem("display_name", result.user.phoneNumber);                       
-              this.router.navigate(['Account']);                         
+              this.logSer.getAccountHolderAssociationType(result.user.phoneNumber).subscribe((data:any)=>{
+                localStorage.setItem("association_type",data.associationType);  
+                localStorage.setItem("phonelogin","1");  
+                this.router.navigate(['Account']);        
+              });                       
             }, error => () => { }, () => { });
         });
       })
       .catch(
           //error => console.log(error, "Incorrect code entered?"),
-          error => this.errorMessage = "Incorrect code Entered");
-   
-      
+          error => this.errorMessage = "Incorrect code Entered");            
   }
 
   loginWithGoogle() {
@@ -153,8 +141,12 @@ export class LoginComponent implements OnInit {
               localStorage.setItem("account_id",data.id);             
               localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
               localStorage.setItem("display_name",this.afAuth.auth.currentUser.email);       
-              localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
-              this.router.navigate(['Account']);
+              localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);  
+              this.logSer.getAccountHolderAssociationType(this.afAuth.auth.currentUser.email).subscribe((data:any)=>{
+                localStorage.setItem("association_type",data.associationType);   
+                localStorage.setItem("phonelogin","0");   
+                this.router.navigate(['Account']);        
+              }); 
             }, error => () => { }, () => { })
           }); 
       })
@@ -168,8 +160,12 @@ export class LoginComponent implements OnInit {
                   localStorage.setItem("account_id",data.id);             
                   localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
                   localStorage.setItem("display_name",this.afAuth.auth.currentUser.email);       
-                  localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
-                  this.router.navigate(['Account']);
+                  localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);  
+                  this.logSer.getAccountHolderAssociationType(this.afAuth.auth.currentUser.email).subscribe((data:any)=>{
+                    localStorage.setItem("association_type",data.associationType);   
+                    localStorage.setItem("phonelogin","0");   
+                    this.router.navigate(['Account']);        
+                  }); 
                 }, error => () => { }, () => { })
               });    
           })
@@ -184,17 +180,24 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  signIntoDB() {    
-    this.logSer.getIpCliente().subscribe((ip: string) => {
-    this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'firebase')
-      .subscribe((data:any) => {
-        localStorage.setItem("account_id",data.id);             
-        localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
-        localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);       
-        localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);         
-        this.router.navigate(['Account']);
-      }, error => () => { }, () => { })
-    });    
+  signIntoDB() {
+    
+    this.logSer.getIpCliente().subscribe((ip: string) => {     
+      this.accser.saveAccountDataEmailServlet( this.afAuth.auth.currentUser.uid, this.afAuth.auth.currentUser.email,'',ip,'Firebase')
+        .subscribe((data:any) => {
+          localStorage.setItem("account_id",data.id);             
+          localStorage.setItem("email",this.afAuth.auth.currentUser.email);    
+          localStorage.setItem("display_name",this.afAuth.auth.currentUser.displayName);       
+          localStorage.setItem("uid",this.afAuth.auth.currentUser.uid);                 
+          this.logSer.getAccountHolderAssociationType(this.afAuth.auth.currentUser.email).subscribe((data:any)=>{
+            localStorage.setItem("association_type",data.associationType);   
+            localStorage.setItem("phonelogin","0");   
+            this.router.navigate(['Account']);        
+          }); 
+        }, error => () => { }, () => { })
+      });  
+
+       
   }
 
 
@@ -215,6 +218,24 @@ export class LoginComponent implements OnInit {
   }
 
   showPhone() {
+    
+    try {
+      firebase.initializeApp(environment.firebase)
+    } catch (error) {
+    }  
+    try
+    {
+    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container-login')             
+    this.windowRef.recaptchaVerifier     
+      .render()
+      .then(widgetId => {
+        this.windowRef.recaptchaWidgetId = widgetId    
+      });
+    }  
+    catch(err)      
+    {
+      
+    }
     var x = document.getElementById('hidden-phone-form')
     if (x.style.display === 'none')
       x.style.display = 'block';

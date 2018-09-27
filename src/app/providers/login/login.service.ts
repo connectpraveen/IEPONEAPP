@@ -32,6 +32,11 @@ export class LoginService {
     return this._http.get<any[]>(this.servletUrl + 'accountHolders/' + id).pipe(map(data => {
             return <any[]>data; }));
  }
+
+ getAccountHolderAssociationType(id): Observable<any[]> {     
+  return this._http.get<any[]>(this.servletUrl + 'accountHolderByAccountHolderId/' + id).pipe(map(data => {
+          return <any[]>data; }));
+}
 deleteAccountHolders(id) {      
   return this._http.delete(this.servletUrl + 'accountHolders/' + id).pipe(map(data => {
           return data; }));
@@ -42,7 +47,7 @@ addAccountHolders(account_id,accountHolderId) {
     "accountId": account_id,
     "identityProvider": "Firebase",
     "accountHolderId": accountHolderId,
-    "verification": "Verified",
+    "verification": "Not Verified",
     "correspondence": "",
     "profileAccess": "0",
     "associationType": "Secondary",

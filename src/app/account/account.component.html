@@ -35,6 +35,7 @@
           <label style="text-transform: capitalize;" [hidden]="emailSaved === false">{{emlMsg}}</label>
           <br>
         </mdb-card-text>
+        <div [hidden]="issecondory" >
         <button [hidden]="!emailVerified" type="button" mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect (click)="loginWithGoogle()" id="addGmail">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Gmail</u>
@@ -44,6 +45,7 @@
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Email</u>
         </button>
+      </div>
         <div mdbModal #frameEmail="mdbModal" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
           aria-hidden="true">
           <div class="modal-dialog modal-notify modal-info" role="document">
@@ -138,11 +140,12 @@
         <h6>Add / Delete Phone</h6>
       </mdb-card-header>
       <mdb-card-body>
-        <button [hidden]="!emailVerified" mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
+        <div [hidden]="issecondory" > <button [hidden]="!emailVerified" mdbBtn type="button" color="primary" class="waves-light rounded" mdbWavesEffect data-toggle="modal" data-target="#basicExample"
           (click)="framePhone.show()" id="addPhone">
           <i class="fa fa-plus"></i>&nbsp;&nbsp;
           <u>Add Phone Number</u>
-        </button>
+        </button></div>
+       
         <div mdbModal #framePhone="mdbModal" class="modal fade" id="frameModalPhone" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
           aria-hidden="true">
           <div class="modal-dialog modal-notify modal-info" role="document">

@@ -48,20 +48,22 @@
 
     </form>
 
-
-    <div id="hidden-phone-form">
+    <form name="phoneform" method="post" #formCtrlPhone="ngForm" id="hidden-phone-form" style="display: none;">
+    <div  >
       <mdb-card>
         <mdb-card-body style="text-align: left;">
           <label for="phone">Phone Number</label>
           <br>
-          <input type="text" style=" max-width: 50px; margin-right: 5px;" [(ngModel)]="phoneNumber.country" class="input" placeholder="91" maxlength="2"
-            id="phoneNumber1">
-          <input type="text" [(ngModel)]="phoneNumber.area" class="input" placeholder="94923456789" maxlength="10"
-            id="phoneNumber2">
-          <div id="recaptcha-container" style="margin-top: 10px; margin-bottom: 10px;"></div>
-
-          <button (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
-
+          <div class="form-group">
+          <input  class="form-control" required type="text" style=" max-width: 50px; margin-right: 5px;" [(ngModel)]="phoneNumber.country" class="input" placeholder="91" maxlength="2"
+            id="phoneNumber1" name="phoneNumber1">
+          <input class="form-control" required type="text" [(ngModel)]="phoneNumber.area" class="input" placeholder="94923456789" maxlength="10"
+            id="phoneNumber2" name="phoneNumber2">
+          <div id="recaptcha-container-login" style="margin-top: 10px; margin-bottom: 10px;"></div>
+          </div>
+          <div class="form-group">
+          <button [disabled]="formCtrlPhone.form.invalid" (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
+            </div>
           <div *ngIf="windowRef.confirmationResult">
             <hr>
             <label for="code">Enter your Verification Code Here</label>            
@@ -76,7 +78,7 @@
       </mdb-card>
 
     </div>
-
+   </form>
   </mdb-card-body>
 </mdb-card>
 

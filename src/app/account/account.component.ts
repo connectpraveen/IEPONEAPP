@@ -26,6 +26,7 @@ import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
   providers: [AccountService, SharedDataService, LoginService, AuthService, WindowService, DatePipe]
 })
 export class AccountComponent implements OnInit {
+  issecondory=true;
   grantSuccess:string;
   grantSuccessPhone:string;
   showVerificationCode = false;
@@ -85,7 +86,15 @@ export class AccountComponent implements OnInit {
     this.auth = this.shared.getAuth();
     this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
       this.emailVerified = false;
-      data.accountHolders.forEach(element => {        
+      if(localStorage.getItem("phonelogin")=="1")
+      {
+        this.emailVerified = true;
+      }
+      if(localStorage.getItem("association_type")=="Primary")
+      {
+        this.issecondory = false;
+      }
+      data.accountHolders.forEach(element => {          
         if (String(element.accountHolderId).indexOf("@") > 0) {          
           if (String(element.associationType) == "Primary") {            
             if (String(element.verification) == "Verified") {              
@@ -102,7 +111,8 @@ export class AccountComponent implements OnInit {
           //   }
           // }
         }
-      });      
+      });  
+      
     });
     
     if (this.afAuth.auth.currentUser) {
