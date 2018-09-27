@@ -64,7 +64,7 @@
           <div class="form-group">
           <button [disabled]="formCtrlPhone.form.invalid" (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
             </div>
-          <div *ngIf="windowRef.confirmationResult">
+          <div [hidden]="!codesent">
             <hr>
             <label for="code">Enter your Verification Code Here</label>            
             <input type="text" name="code" [(ngModel)]="verificationCode">

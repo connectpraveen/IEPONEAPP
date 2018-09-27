@@ -21,7 +21,7 @@ export class AppComponent {
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       this.email = params['email'];    
       this.account_id=params["acc"];     
-      this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
+      this.logSer.getAccountHolders(this.email).subscribe((data: any) => {
         data.accountHolders.forEach(element => {
           if (String(element.accountHolderId).indexOf("@") > 0) {        
              if(element.accountHolderId==this.email)

@@ -26,6 +26,7 @@ import { ActivatedRoute, UrlSegment, ParamMap,Params } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   email=false;
+  codesent=false;
   user = {
     email: '',
     password: ''
@@ -36,7 +37,6 @@ export class LoginComponent implements OnInit {
   model: any = {}; currentAccount: Account;
   message: string;
   errorMessage: string;
- 
   authState: any = null; name: string;
   private userDetails: firebase.User = null; authenticated: boolean = false;
   phoneNumber = new PhoneNumber()
@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {    
+    localStorage.setItem("account_id","0");
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       if(params['email']!=null)
       this.email =true ;               
@@ -80,6 +81,7 @@ export class LoginComponent implements OnInit {
     const num = this.phoneNumber.e164;
     firebase.auth().signInWithPhoneNumber(num, appVerifier)
       .then(result => {
+        this.codesent=true;
         this.windowRef.confirmationResult = result;
       })
       .catch(error => console.log(error));
@@ -234,7 +236,7 @@ export class LoginComponent implements OnInit {
     }  
     catch(err)      
     {
-      
+
     }
     var x = document.getElementById('hidden-phone-form')
     if (x.style.display === 'none')

@@ -23,7 +23,7 @@
         <h6>Welcome {{currentUsername}}!</h6>
       </mdb-card-header>
       <mdb-card-body>
-        <mdb-card-title>Email {{eMail}}</mdb-card-title>
+        <mdb-card-title>{{EmailText}} {{eMail}}</mdb-card-title>
         <div [hidden]="emailVerified">   <button mdbBtn color="primary" class="waves-light rounded" mdbWavesEffect type="submit" id="verifyButton"
           data-toggle="modal" data-target="#content" (click)="onVerifyEmail()">
           <u>Verify</u>
@@ -84,6 +84,7 @@
         </div>
       </mdb-card-body>
     </mdb-card>
+    <div [hidden]="issecondory" >
     <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px">
       <mdb-card-header class="primary-color white-text">
         <h6>Associated Email</h6>
@@ -135,6 +136,8 @@
         </div>
       </mdb-card-body>
     </mdb-card>
+    </div>
+    <div [hidden]="issecondory" >
     <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px">
       <mdb-card-header class="primary-color white-text">
         <h6>Add / Delete Phone</h6>
@@ -235,6 +238,7 @@
         </div>
       </mdb-card-body>
     </mdb-card>
+    </div>
     <mdb-card style="margin-left: 15px; margin-right: 15px; margin-top: 15px; margin-bottom: 70px;">
       <mdb-card-header class="primary-color white-text">
         <h6>Platform Login History</h6>

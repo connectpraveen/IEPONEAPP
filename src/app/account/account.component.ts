@@ -27,6 +27,7 @@ import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
 })
 export class AccountComponent implements OnInit {
   issecondory=true;
+  EmailText="Email";
   grantSuccess:string;
   grantSuccessPhone:string;
   showVerificationCode = false;
@@ -84,32 +85,22 @@ export class AccountComponent implements OnInit {
     this.showSignout = true;
    
     this.auth = this.shared.getAuth();
-    this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
+    this.logSer.getAccountHolders(localStorage.getItem('email')).subscribe((data: any) => {
       this.emailVerified = false;
       if(localStorage.getItem("phonelogin")=="1")
       {
         this.emailVerified = true;
+        this.EmailText="Phone";
       }
       if(localStorage.getItem("association_type")=="Primary")
       {
         this.issecondory = false;
       }
       data.accountHolders.forEach(element => {          
-        if (String(element.accountHolderId).indexOf("@") > 0) {          
-          if (String(element.associationType) == "Primary") {            
+        if (String(element.accountHolderId).indexOf("@") > 0) {                            
             if (String(element.verification) == "Verified") {              
               this.emailVerified = true;              
-            }
-          }
-        }
-
-        else {
-          this.emailVerified = true;
-          // if (String(element.associationType) == "Primary") {
-          //   if (String(element.verification) == "Verified") {
-          //     this.emailVerified = true;
-          //   }
-          // }
+            }          
         }
       });  
       
@@ -156,7 +147,7 @@ export class AccountComponent implements OnInit {
     this.GetAccountHolders();
   }
   GetAccountHolders() {
-    this.logSer.getAccountHolders(this.account_id).subscribe((data: any) => {
+    this.logSer.getAccountHolders(localStorage.getItem('email')).subscribe((data: any) => {
       this.associatedEmailAddresses = [];
       this.associatedPhones = [];
       data.accountHolders.forEach(element => {

@@ -29,7 +29,7 @@ export class LoginService {
              return <Login[]>data; }));
   }
   getAccountHolders(id): Observable<any[]> {     
-    return this._http.get<any[]>(this.servletUrl + 'accountHolders/' + id).pipe(map(data => {
+    return this._http.get<any[]>(this.servletUrl + 'accountHolderListByAccountHolderId/' + id).pipe(map(data => {
             return <any[]>data; }));
  }
 
