@@ -27,6 +27,7 @@ import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
 })
 export class AccountComponent implements OnInit {
   issecondory=true;
+  PhoneSuccess="";
   EmailText="Email";
   grantSuccess:string;
   grantSuccessPhone:string;
@@ -324,8 +325,18 @@ export class AccountComponent implements OnInit {
             }
           });
        
-          this.GetAccountHolders();           
-          this.grantSuccess="Email has been added and password reset link has been sent";
+          this.GetAccountHolders();         
+          console.log("Account id local"+ this.account_id + " Account Id from DB:"+data.accountId)
+          console.log(data);
+          if(this.account_id!=data.accountId)
+          {
+            this.grantSuccess= "Email-already-in-use with some other account."
+          }  
+          else
+          {
+            this.grantSuccess="Email has been added and password reset link has been sent";
+          }        
+          
           document.getElementById('addframeEmailModal').click();
         }, error => () => { }, () => { });
     }
@@ -370,7 +381,12 @@ export class AccountComponent implements OnInit {
   }
 
   addPhone() {
-    this.logSer.addAccountHolders(this.account_id, this.phoneNumber.e164).subscribe((data: any) => {
+    this.logSer.addAccountHolders(this.account_id, this.phoneNumber.e164).subscribe((data: any) => {        
+      console.log(data);
+      if(this.account_id!=data.accountId)      
+      {       
+        this.grantSuccessPhone= "Phone-already-in-use with some other account."
+      }      
       this.GetAccountHolders();
     });
 
@@ -406,8 +422,12 @@ export class AccountComponent implements OnInit {
   signIntoDB() {
     this.logSer.addAccountHolders(this.account_id, this.afAuth.auth.currentUser.email)
       .subscribe((data: any) => {
+        if(this.account_id!=data.accountId)
+        {
+          this.grantSuccess= "Email-already-in-use with some other account.";
+        }
         this.GetAccountHolders();
-      }, error => () => { }, () => { });
+      }, error => () => { }, () => {});
   }
 
   addLoginInfo(account_id) {
