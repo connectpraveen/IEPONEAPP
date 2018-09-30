@@ -13,7 +13,7 @@ import { SubscribeService } from '../providers/subscription/subscribe.service';
 import { UserAssociateEmail, UserAssociatePhone } from '../account/user-associate-email';
 import { AccountEmailFirebaseService } from '../providers/firebase/account-email-firebase.service';
 import { AccountGmailFirebaseService } from '../providers/firebase/account-gmail-firebase.service';
-
+import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -49,7 +49,7 @@ export class ProfileComponent implements OnInit {
   message:string;
   Profile_Image = 'assets/images/profile.png';
   profile:Profile;
-  constructor(private accser: AccountService, private shared: SharedDataService,
+  constructor(private router: Router,private accser: AccountService, private shared: SharedDataService,
     private logSer: LoginService, public afAuth: AngularFireAuth,
     private authService: AuthService, private profSer: ProfileService, private sharedService: SharedDataService, private subSer: SubscribeService,
     private datePipe: DatePipe, private accSer: AccountService, private accountEmailFirebaseService: AccountEmailFirebaseService,
@@ -60,6 +60,8 @@ export class ProfileComponent implements OnInit {
     });
   }
   ngOnInit() {
+    if(localStorage.getItem("account_id")=="0")   
+    this.router.navigate(['/login']); 
     this.account_id = localStorage.getItem("account_id");
     this.showSignout=true;
     this.auth = this.shared.getAuth();

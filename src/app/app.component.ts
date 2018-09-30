@@ -19,17 +19,9 @@ export class AppComponent {
     this.title = 'IEP ONE';
 
     this.activatedRoute.queryParams.subscribe((params: Params) => {
-      this.email = params['email'];    
-      this.account_id=params["acc"];     
-      this.logSer.getAccountHolders(this.email).subscribe((data: any) => {
-        data.accountHolders.forEach(element => {
-          if (String(element.accountHolderId).indexOf("@") > 0) {        
-             if(element.accountHolderId==this.email)
-             {             
-              this.UpdateVerify(element.id,this.account_id,element.accountHolderId,element.identityProvider,element.verification,element.correspondence,element.profileAccess,element.associationType);
-             }          
-          }      
-        });
+      this.email = params['email'];             
+      this.logSer.getAccountHolderAssociationType(this.email).subscribe((data: any) => {                
+      this.UpdateVerify(data.id,data.accountId,data.accountHolderId,data.identityProvider,data.verification,data.correspondence,data.profileAccess,data.associationType);         
       });
      });     
    

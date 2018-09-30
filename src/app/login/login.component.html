@@ -1,4 +1,8 @@
-<app-header></app-header>
+<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark green scrolling-navbar ie-nav" [containerInside]="false" role="navigation">        
+  <mdb-navbar-brand>          
+        <a href=""><img style="height: 50px !important" src="assets/images/logo_white.png"></a>
+  </mdb-navbar-brand>
+</mdb-navbar>
 <div [hidden]="!email" style="margin-top: 100px; margin-left: 20px; font-size: 20px;">
   Your email has been verified!
 </div>
@@ -22,7 +26,7 @@
         <u>Click Here to login with Phone</u>
       </a>
     </div>
-    <form name="userform" method="post" #formCtrl="ngForm" id="hidden-email-form">
+    <form name="userform" method="post" #formCtrl="ngForm" id="hidden-email-form" style="display: none;">
       <mdb-card>
         <mdb-card-body style="text-align: left;"> 
           <div class="form-group">
@@ -37,8 +41,7 @@
           </div>
 
           <div class="form-group">
-            <button type="button" id="loginButton" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="signInWithEmail()"
-              [disabled]="formCtrl.form.invalid">
+            <button type="button" id="loginButton" class="btn btn-primary btn-block" style="margin-bottom: 20px" (click)="signInWithEmail()">
               Login with Email
             </button>
           </div>
@@ -62,7 +65,7 @@
           <div id="recaptcha-container-login" style="margin-top: 10px; margin-bottom: 10px;"></div>
           </div>
           <div class="form-group">
-          <button [disabled]="formCtrlPhone.form.invalid" (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
+          <button (click)="sendLoginCode()" class="btn btn-primary btn-block" id="phoneSubmit">SMS Text Login Code</button>
             </div>
           <div [hidden]="!codesent">
             <hr>

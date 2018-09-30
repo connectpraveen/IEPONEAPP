@@ -80,6 +80,9 @@ export class AccountComponent implements OnInit {
     });
   }
   ngOnInit() {
+    if(localStorage.getItem("account_id")=="0")   
+      this.router.navigate(['/login']);    
+
     this.account_id = localStorage.getItem("account_id");
     this.uid = localStorage.getItem("uid");
     
@@ -257,10 +260,7 @@ export class AccountComponent implements OnInit {
           //password: 'abcd',
           parentId: this.auth.parentId, // parent-Id of current login user
           email: res.user.email
-        });  
-        this.accser.sendemail(res.user.email,this.account_id)
-        .subscribe((data: any) => {       
-        }, error => () => { }, () => { });     // this.signIntoDB();
+        });        
       })
       .catch((error) => {
         /*let result = this.linkAccount(error);
@@ -310,24 +310,16 @@ export class AccountComponent implements OnInit {
       this.logSer.addAccountHolders(this.account_id, input)
         .subscribe((data: any) => {
           this.authService.createUser(input, pwd)
-          .then((res) => {     
-            this.afAuth.auth.sendPasswordResetEmail(input).then(function () {                 
-            }).catch((error) => {            
-            }); 
+          .then((res) => {                
           })
           .catch((err) => {       
-            if (err.code == 'auth/email-already-in-use') {    
-              this.afAuth.auth.sendPasswordResetEmail(input).then(function () {            
-              }).catch((error) => {            
-              });            
+            if (err.code == 'auth/email-already-in-use') {                         
             }
             else {         
             }
           });
        
-          this.GetAccountHolders();         
-          console.log("Account id local"+ this.account_id + " Account Id from DB:"+data.accountId)
-          console.log(data);
+          this.GetAccountHolders();                 
           if(this.account_id!=data.accountId)
           {
             this.grantSuccess= "Email-already-in-use with some other account."
@@ -335,6 +327,9 @@ export class AccountComponent implements OnInit {
           else
           {
             this.grantSuccess="Email has been added and password reset link has been sent";
+            this.afAuth.auth.sendPasswordResetEmail(input).then(function () {                 
+            }).catch((error) => {            
+            }); 
           }        
           
           document.getElementById('addframeEmailModal').click();
@@ -426,8 +421,16 @@ export class AccountComponent implements OnInit {
         {
           this.grantSuccess= "Email-already-in-use with some other account.";
         }
-        this.GetAccountHolders();
+        else
+        {  
+          document.getElementById('account_button').click();          
+          this.grantSuccess="Email has been added, and verification link has been sent.";
+          this.accser.sendemail(this.afAuth.auth.currentUser.email,this.account_id)
+          .subscribe((data: any) => {       
+          }, error => () => { }, () => { });     
+        }       
       }, error => () => { }, () => {});
+     
   }
 
   addLoginInfo(account_id) {

@@ -20,8 +20,9 @@ export class HeaderComponent implements OnInit {
     if(localStorage.getItem("account_id")!="0")
     this.showSignout = true;
     else 
-    { this.showSignout = false; 
-      this.router.navigate(['/login']);
+    { 
+      this.showSignout = false; 
+      //this.router.navigate(['/login']);
     }
       
   }

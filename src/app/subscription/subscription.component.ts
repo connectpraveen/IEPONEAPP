@@ -9,6 +9,8 @@ import { AuthService } from '../providers/auth.service';
 import { SubscribeService } from '../providers/subscription/subscribe.service';
 import { Observable } from '../../../node_modules/rxjs';
 import {environment} from '../../environments/environment'
+import { ActivatedRoute, Router, UrlSegment, ParamMap } from '@angular/router';
+
 @Component({
   selector: 'app-subscription',
   templateUrl: './subscription.component.html',
@@ -43,7 +45,7 @@ export class SubscriptionComponent implements OnInit {
 };
   account_id:string;
   currentUsername: string; authState: any = null;
-  constructor(private accser: AccountService, private shared: SharedDataService,
+  constructor(private router: Router,private accser: AccountService, private shared: SharedDataService,
     private logSer: LoginService, public afAuth: AngularFireAuth, 
     private authService: AuthService, private subsciptionsvc:SubscribeService  ) {
     this.afAuth.authState.subscribe((auth) => {
@@ -52,7 +54,9 @@ export class SubscriptionComponent implements OnInit {
     });
   }
   ngOnInit() {   
-    
+    if(localStorage.getItem("account_id")=="0")   
+    this.router.navigate(['/login']); 
+
     this.account_id = localStorage.getItem("account_id");  
       this.showSignout= true;         
       this.getSubscription(); 
